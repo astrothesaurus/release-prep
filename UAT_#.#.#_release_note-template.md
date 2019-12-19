@@ -9,8 +9,8 @@ Release Date: ##/##/####
   * (branches)
 * Minor revisions of two branches:
   * (branches)
-* ## new concepts were added to the UAT.
-* ## concepts were deprecated.
+* Added ## new concepts to the UAT.
+* Deprecated ## concepts.
 * The preferred label of ## concepts were updated to add context, clarity, and consistency.
 * Added or updated AltLabels for ## concepts, remove AltLabels for ## concepts.
 * Added ## definition and ## scope notes.
