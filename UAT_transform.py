@@ -14,7 +14,7 @@ timestamp = datetime.now().strftime("%Y_%m%d_%H%M")
 
 ##### RDF File Location #####
 ##### assign this variable to location of UAT SKOS-RDF file exported from VocBench ##### 
-rdf = "uatv.3.1.0.rdf"
+rdf = "UAT3.1.rdf"
 
 ##### Shared Functions and Variables #####
 ##### do NOT edit this section #####
@@ -174,27 +174,27 @@ def getallchilds(term, childlist):
 
 print "\nCreating HTML files for the web browsers..."
 # alpha and hierarchy pages, term recprds
-#execfile("transformations/UAT_SKOS_to_html.py")
+execfile("transformations/UAT_SKOS_to_html.py")
 # working, 12/13/2019
 
 print "\nCreating CSV hierarchy flatfile..."
 # csv version of the UAT
-#execfile("transformations/UAT_SKOS_to_flatfile.py")
+execfile("transformations/UAT_SKOS_to_flatfile.py")
 # working, 12/13/2019
 
 print "\nCreating json files for sorting tool..."
 # used in the sorting tool
-#execfile("transformations/UAT_SKOS_to_dendrogram.py")
+execfile("transformations/UAT_SKOS_to_dendrogram.py")
 # working, 12/13/2019
 
 print "\nCreating javascript for autocomplete..."
 # Alex Holachek's autocomplete widget
-#execfile("transformations/UAT_SKOS_to_autocomplete.py")
+execfile("transformations/UAT_SKOS_to_autocomplete.py")
 # working, 12/13/2019
 
 print "\nCreating flat list csv file..."
 # single list of all unique concepts
-#execfile("transformations/UAT_SKOS_to_csv_lists.py")
+execfile("transformations/UAT_SKOS_to_csv_lists.py")
 # working, 12/13/2019
 
 print "\nCreating 'related to' CSV list..."

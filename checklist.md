@@ -1,12 +1,12 @@
 # UAT Release Check List
 
-### Friday Prior to Release
+### One Week Prior to Release (Friday)
 * Finalize/close/move remaining issues in open Milestones
 * Close Milestones
 * Inform stakeholders at EJPress and IoP of pending release
 * Open new Milestone
 
-### Week of Release
+### Week of Release (Monday - Thursday)
 * Export UAT RDF from management tool
 * Generate updated UAT files (see UAT_transform.py)
   * html for [concept records](http://wolba.ch/astrothesaurus/uat/termrecords) that support [alphabetical](http://wolba.ch/astrothesaurus/uat/alpha.html) and [hierarchical](http://wolba.ch/astrothesaurus/uat/hierarchy.html) browsers
@@ -19,7 +19,7 @@
 * Update this checklist if needed
 * Select new image for website header rotation
 
-### Launch Day
+### Launch Day (Friday)
 * Push UAT repo (includes new UAT version, notes, etc) to GitHub
 * Upload new html, json, js files to UAT website
 * Push new version to UAT API

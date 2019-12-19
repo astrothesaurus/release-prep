@@ -44,10 +44,10 @@ print "Reading the SKOS file...this may take a few seconds."
 ##### assign this variable to location of UAT SKOS-RDF file exported from VocBench ##### 
 
 ##export RDF/XML Concepts
-uat_new = "UATv.3.1.0.rdf" # filename for the new version
+uat_new = "UAT3.1.rdf" # filename for the new version
 
 #get previous version RDF from GitHub
-uat_prev = "UATv.3.0.0.rdf" # filename for the previous version
+uat_prev = "UAT3.0.rdf" # filename for the previous version
 
 ##### Shared Functions and Variables #####
 ##### do NOT edit this section #####
