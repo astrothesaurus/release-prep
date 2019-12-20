@@ -17,6 +17,7 @@
 * Prepare and finalize local UAT repo, commit changes
 * Update UAT transformation scripts in GitHub if needed
 * Select new image for website header rotation
+* Write annoucement blog post, schedule for release
 
 ### Launch Day (Friday)
 * Push UAT repo (includes new UAT version, notes, etc) to GitHub
