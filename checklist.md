@@ -16,7 +16,6 @@
   * summary notes & full notes
 * Prepare and finalize local UAT repo, commit changes
 * Update UAT transformation scripts in GitHub if needed
-* Update this checklist if needed
 * Select new image for website header rotation
 
 ### Launch Day (Friday)
@@ -31,3 +30,5 @@
   * [Hierarchical Browse](http://astrothesaurus.org/thesaurus/hierarchical-browse/)
   * [Autocomplete Widget](http://astrothesaurus.org/thesaurus/autocomplete-widget/)
 * Troubleshoot anything that didn't update or is broken
+* Update current version number on [UAT homepage](http://astrothesaurus.org/)
+* Update this checklist if needed

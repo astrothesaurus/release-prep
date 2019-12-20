@@ -1,4 +1,4 @@
-# Unified Astronomy Thesaurus v.#.#.# Release Notes Summary
+# Unified Astronomy Thesaurus v.#.#.# Release Notes (Summary)
 
 Version #.#.# of the Unified Astronomy Thesaurus consists of a polyhierarchy with #### concepts, 11 top concepts, a depth of 11 levels, with ### related concept links.
 
@@ -9,7 +9,7 @@ Release Date: ##/##/####
   * (branches)
 * Minor revisions of two branches:
   * (branches)
-* Added ## new concepts to the UAT.
+* Added ## new concepts.
 * Deprecated ## concepts.
 * The preferred label of ## concepts were updated to add context, clarity, and consistency.
 * Added or updated AltLabels for ## concepts, remove AltLabels for ## concepts.
