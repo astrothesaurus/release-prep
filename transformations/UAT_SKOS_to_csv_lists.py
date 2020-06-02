@@ -2,42 +2,22 @@
 
 import csv
 import codecs
-import cStringIO
 from datetime import datetime
 
-import sys
+resultFile4 = open("uat_list_with_notes"+timestamp+".csv",'w', encoding='utf-8', newline='')
 
-reload(sys)
-sys.setdefaultencoding("utf-8")
+resultFile3 = open("uat_list_with_uris"+timestamp+".csv",'w', encoding='utf-8', newline='')
+resultFile2 = open("uat_list"+timestamp+".csv",'w', encoding='utf-8', newline='')
+resultFile = open("uat_list_with_alts"+timestamp+".csv",'w', encoding='utf-8', newline='')
 
-class UnicodeWriter:
-    def __init__(self, f, dialect=csv.excel, encoding="utf-8-sig", **kwds):
-        self.queue = cStringIO.StringIO()
-        self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
-        self.stream = f
-        self.encoder = codecs.getincrementalencoder(encoding)()
-    def writerow(self, row):
-        self.writer.writerow([s.encode("utf-8") for s in row])
-        data = self.queue.getvalue()
-        data = data.decode("utf-8")
-        data = self.encoder.encode(data)
-        self.stream.write(data)
-        self.queue.truncate(0)
-
-    def writerows(self, rows):
-        for row in rows:
-            self.writerow(row)
-
-resultFile3 = open("uat_list_with_uris"+timestamp+".csv",'wb')
-resultFile2 = open("uat_list"+timestamp+".csv",'wb')
-resultFile = open("uat_list_with_alts"+timestamp+".csv",'wb')
-
-wr = UnicodeWriter(resultFile,dialect='excel',quoting=csv.QUOTE_ALL)
-wr2 = UnicodeWriter(resultFile2,dialect='excel',quoting=csv.QUOTE_ALL)
-wr3 = UnicodeWriter(resultFile3,dialect='excel',quoting=csv.QUOTE_ALL)
+wr = csv.writer(resultFile,quoting=csv.QUOTE_ALL)
+wr2 = csv.writer(resultFile2,quoting=csv.QUOTE_ALL)
+wr3 = csv.writer(resultFile3,quoting=csv.QUOTE_ALL)
+wr4 = csv.writer(resultFile4,quoting=csv.QUOTE_ALL)
 
 wr.writerow(["preferred term"]+["alternate terms"])
 wr3.writerow(["preferred term"]+["uri"])
+wr4.writerow(["preferred term"]+["editorial notes"]+["change notes"]+["scope notes"]+["examples"]+["definition"])
 
 alltermlist = []
 for iall in allconcepts:
@@ -49,12 +29,23 @@ for iall in allconcepts:
     else:
         altlist = []
     lits = lit(iall)
-    wr.writerow([lits]+altlist)
-    wr2.writerow([lits])
-    wr3.writerow([lits]+[iall])
+    print (lits)
+    if lits != None:
+
+        ednote = getednotes(iall)
+        chnote = getchangenotes(iall)
+        scnote = getscopenotes(iall)
+        ex = getexample(iall)
+        define = getdefinition(iall)
+
+        wr.writerow([lits]+altlist)
+        wr2.writerow([lits])
+        wr3.writerow([lits]+[iall])
+        wr4.writerow([lits]+[ednote]+[chnote]+[scnote]+[ex]+[define])
 
 resultFile.close()
 resultFile2.close()
 resultFile3.close()
+resultFile4.close()
 
-print "Finished. See uat_list"+timestamp+".csv and uat_list_with_alts"+timestamp+".csv"
+print ("Finished. See uat_list"+timestamp+".csv and uat_list_with_alts"+timestamp+".csv")

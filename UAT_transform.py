@@ -8,13 +8,13 @@ import unicodedata
 import pandas as pd
 from datetime import datetime
 
-print "Reading the SKOS file...this may take a few seconds."
+print ("Reading the SKOS file...this may take a few seconds.")
 
 timestamp = datetime.now().strftime("%Y_%m%d_%H%M")
 
 ##### RDF File Location #####
 ##### assign this variable to location of UAT SKOS-RDF file exported from VocBench ##### 
-rdf = "UAT3.1.rdf"
+rdf = "UAT.rdf"
 
 ##### Shared Functions and Variables #####
 ##### do NOT edit this section #####
@@ -22,7 +22,7 @@ rdf = "UAT3.1.rdf"
 
 #reads SKOS-RDF file into a RDFlib graph for use in these scripts
 g = rdflib.Graph()
-result = g.parse((rdf).encode('utf8'))
+result = g.parse((rdf))#.encode('utf8'))
 
 #defines certain properties within the SKOS-RDF file
 prefLabel = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#prefLabel')
@@ -139,7 +139,6 @@ def getdefinition(term):
     for deftest in g.objects(subject=d, predicate=definition):
         return deftest
 
-
 #a function to return the human readable form of the prefered version of a term
 def lit(term):
     d = rdflib.term.URIRef(term)
@@ -172,35 +171,35 @@ def getallchilds(term, childlist):
 
 ## New Version Reqs
 
-print "\nCreating HTML files for the web browsers..."
+print ("\nCreating HTML files for the web browsers...")
 # alpha and hierarchy pages, term recprds
-execfile("transformations/UAT_SKOS_to_html.py")
+#exec(open("transformations/UAT_SKOS_to_html.py").read())
 # working, 12/13/2019
 
-print "\nCreating CSV hierarchy flatfile..."
+print ("\nCreating CSV hierarchy flatfile...")
 # csv version of the UAT
-execfile("transformations/UAT_SKOS_to_flatfile.py")
+#exec(open("transformations/UAT_SKOS_to_flatfile.py").read())
 # working, 12/13/2019
 
-print "\nCreating json files for sorting tool..."
+print ("\nCreating json files for sorting tool...")
 # used in the sorting tool
-execfile("transformations/UAT_SKOS_to_dendrogram.py")
+exec(open("transformations/UAT_SKOS_to_dendrogram.py").read())
 # working, 12/13/2019
 
-print "\nCreating javascript for autocomplete..."
+print ("\nCreating javascript for autocomplete...")
 # Alex Holachek's autocomplete widget
-execfile("transformations/UAT_SKOS_to_autocomplete.py")
+#exec(open("transformations/UAT_SKOS_to_autocomplete.py").read())
 # working, 12/13/2019
 
-print "\nCreating flat list csv file..."
+print ("\nCreating flat list csv file...")
 # single list of all unique concepts
-execfile("transformations/UAT_SKOS_to_csv_lists.py")
+#exec(open("transformations/UAT_SKOS_to_csv_lists.py").read())
 # working, 12/13/2019
 
-print "\nCreating 'related to' CSV list..."
+print ("\nCreating 'related to' CSV list...")
 # list of all "related conecpt" links
-execfile("transformations/UAT_SKOS_to_related_list.py")
+#exec(open("transformations/UAT_SKOS_to_related_list.py").read())
 # working, 12/13/2019
 
-print "\nFinished with all scripts!"
+print ("\nFinished with all scripts!")
 
