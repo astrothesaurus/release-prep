@@ -1,6 +1,6 @@
 # coding: utf-8
 
-print "Writing term record files..."
+print ("Writing term record files...")
 directory = 'termrecords'
 if os.path.exists(directory):
     shutil.rmtree(directory)
@@ -8,8 +8,9 @@ os.makedirs(directory)
 
 #writes an html file for each term
 for t in allconcepts:
-    urlterm = unicode(lit(t)).replace(" ", "+").replace("/", "_")
+    urlterm = lit(t).replace(" ", "+").replace("/", "_")
     #get all the info for each term
+    print (t)
     usnts = getnarrowerterms(t)
     usbts = getbroaderterms(t)
     usats = getaltterms(t)
@@ -21,16 +22,16 @@ for t in allconcepts:
     termexample = getexample(t)
 
     #create file for this particular term
-    fileterm = open("termrecords\\"+urlterm+".html", 'w')
+    fileterm = open("termrecords\\"+urlterm+".html", 'w', encoding='utf-8')
     
     #file header
     fileterm.write("<html>\n")
-    fileterm.write("<head><title>Concept Record: "+lit(t).encode('utf-8')+"</title>\n")
+    fileterm.write("<head><title>Concept Record: "+lit(t)+"</title>\n")
     fileterm.write("<style>a,a:link,a:visited{color:#b4083a;text-decoration:underline}a:hover,a:active{text-decoration:none}a.tooltips,a.figure{color:#b4083a;font-weight:bold;text-decoration:none}h3{padding:0px; margin:0px;display:inline}</style>\n")
     fileterm.write("<meta charset='utf-8'></head>\n<body>\n")
     
     #term heading
-    fileterm.write("<h3>"+lit(t).encode('utf-8')+"</h3>\n")
+    fileterm.write("<h3>"+lit(t)+"</h3>\n")
     fileterm.write("<br/><a target='blank' style='font-size:80%;' href='"+t+"'>"+t+"</a>\n")
     
     #broader terms
@@ -38,15 +39,15 @@ for t in allconcepts:
         fileterm.write("<dl>\n<p><dt><i>Broader Concept(s)</i>:</dt>\n")
         usbt = []
         for ubt in usbts:
-            usbt.append(unicode(lit(ubt)))
+            usbt.append(lit(ubt))
         sbt = sorted(usbt)
         for bt in sbt:
             bturl = bt.replace(" ", "+").replace("/", "")+".html"
-            cbturl = bturl.encode('utf-8')
+            cbturl = bturl
             if bt in deprecated:
-                fileterm.write("<dd><del><a href=\""+cbturl+"\">"+bt.encode('utf-8')+"</a></del></dd>\n")
+                fileterm.write("<dd><del><a href=\""+cbturl+"\">"+bt+"</a></del></dd>\n")
             else:
-                fileterm.write("<dd><a href=\""+cbturl+"\">"+bt.encode('utf-8')+"</a></dd>\n")
+                fileterm.write("<dd><a href=\""+cbturl+"\">"+bt+"</a></dd>\n")
         fileterm.write("</p>\n")
     else:
         fileterm.write("<br /><br/><a href='toplevelconcepts.html'>view all top level concepts</a>\n") 
@@ -57,15 +58,15 @@ for t in allconcepts:
         usnt = []
         dusnt = []
         for unt in usnts:
-            usnt.append(unicode(lit(unt)))
+            usnt.append(lit(unt))
         snt = sorted(usnt)
         for nt in snt:
             nturl = nt.replace(" ", "+").replace("/", "")+".html"
-            cnturl = nturl.encode('utf-8')
+            cnturl = nturl
             if nt in deprecated:
-                fileterm.write("<dd><del><a href=\""+cnturl+"\">"+nt.encode('utf-8')+"</a></del></dd>\n")
+                fileterm.write("<dd><del><a href=\""+cnturl+"\">"+nt+"</a></del></dd>\n")
             else:           
-                fileterm.write("<dd><a href=\""+cnturl+"\">"+nt.encode('utf-8')+"</a></dd>\n")
+                fileterm.write("<dd><a href=\""+cnturl+"\">"+nt+"</a></dd>\n")
         fileterm.write("</p>\n")
     
     #related terms
@@ -73,15 +74,15 @@ for t in allconcepts:
         fileterm.write("<p><dt><i>Related Concept(s)</i>:</dt>\n")
         usrt = []
         for urt in usrts:
-            usrt.append(unicode(lit(urt)))
+            usrt.append(lit(urt))
         srt = sorted(usrt)
         for rt in srt:
             rturl = rt.replace(" ", "+").replace("/", "")+".html"
-            crturl = rturl.encode('utf-8')
+            crturl = rturl
             if rt in deprecated:
-                fileterm.write("<dd><del><a href=\""+crturl+"\">"+rt.encode('utf-8')+"</a></del></dd>\n")
+                fileterm.write("<dd><del><a href=\""+crturl+"\">"+rt+"</a></del></dd>\n")
             else:
-                fileterm.write("<dd><a href=\""+crturl+"\">"+rt.encode('utf-8')+"</a></dd>\n")
+                fileterm.write("<dd><a href=\""+crturl+"\">"+rt+"</a></dd>\n")
         fileterm.write("</p>\n")
 
     #alternate forms
@@ -89,49 +90,52 @@ for t in allconcepts:
         fileterm.write("<p><dt><i>Use For</i>:</dt>\n")
         usat = []
         for at in usats:
-            #usat.append(unicode(getaltterms(uat)))
+            #usat.append(getaltterms(uat))
         #sat = sorted(usat)
         #for at in sat:
-            fileterm.write("<dd>"+at.encode('utf-8')+"</dd>\n")
+            print (at)
+            fileterm.write("<dd>"+at+"</dd>\n")
         fileterm.write("</p>\n")
 
     #examples
     if termexample != None:
         fileterm.write("<p><dt><i>Examples</i>:</dt>\n")
-        fileterm.write("<dd>"+termexample.encode('utf-8')+"</dd>\n")
+        fileterm.write("<dd>"+termexample+"</dd>\n")
         fileterm.write("</p>\n")
 
     #editorial notes
     if ednotations != None:
-        fileterm.write("<p><dt><i>Editorial Notes</i>:</dt>\n")
-        fileterm.write("<dd>"+ednotations.encode('utf-8')+"</dd>\n")
-        fileterm.write("</p>\n")
+        print (ednotations)
+        # fileterm.write("<p><dt><i>Editorial Notes</i>:</dt>\n")
+        # fileterm.write("<dd>"+ednotations+"</dd>\n")
+        # fileterm.write("</p>\n")
 
     #change notes
     if chnotations != None:
-        fileterm.write("<p><dt><i>Change Notes</i>:</dt>\n")
-        fileterm.write("<dd>"+chnotations.encode('utf-8')+"</dd>\n")
-        fileterm.write("</p>\n")
+        print (chnotations)
+        # fileterm.write("<p><dt><i>Change Notes</i>:</dt>\n")
+        # fileterm.write("<dd>"+chnotations+"</dd>\n")
+        # fileterm.write("</p>\n")
 
     #scope notes
     if scnotations != None:
         fileterm.write("<p><dt><i>Scope Notes</i>:</dt>\n")
-        fileterm.write("<dd>"+scnotations.encode('utf-8')+"</dd>\n")
+        fileterm.write("<dd>"+scnotations+"</dd>\n")
         fileterm.write("</p>\n")
    
     #status
     if vocstats != None:
         fileterm.write("<p><dt><i>Status</i>:</dt>\n")
-        fileterm.write("<dd>"+vocstats.encode('utf-8')+"</dd></p>\n")
+        fileterm.write("<dd>"+vocstats+"</dd></p>\n")
         
     #finish off html and close file
     fileterm.write("</dl>\n")
     fileterm.write("</body>\n</html>\n")
     fileterm.close()
 
-print "Writing toplevelconcepts.html..."
+print ("Writing toplevelconcepts.html...")
 #creates toplevelconcepts.html
-filetop = open("termrecords\\toplevelconcepts.html", 'w')
+filetop = open("termrecords\\toplevelconcepts.html", 'w', encoding='utf-8')
 filetop.write("<html>\n")
 filetop.write("<head><title>Top Level Concepts</title>\n")
 filetop.write("<style>a,a:link,a:visited{color:#b4083a;text-decoration:underline}a:hover,a:active{text-decoration:none}a.tooltips,a.figure{color:#b4083a;font-weight:bold;text-decoration:none}</style>\n")
@@ -139,21 +143,21 @@ filetop.write("<meta charset='utf-8'></head>\n<body>\n")
 filetop.write("<h3>UAT Top Level Concepts</h3>\n")
 ust = []
 for ut in alltopconcepts:
-    ust.append(unicode(lit(ut)))
+    ust.append(lit(ut))
 st = sorted(ust)
 for t in st:
     urlterm = t.replace(" ", "+").replace("/", "_")
-    curlterm = urlterm.encode('utf-8')
+    curlterm = urlterm
     if t in deprecated:
-        filetop.write("<del><a href=\""+curlterm+".html\">"+t.encode('utf-8')+"</a></del></br>\n")
+        filetop.write("<del><a href=\""+curlterm+".html\">"+t+"</a></del></br>\n")
     else:
-        filetop.write("<a href=\""+curlterm+".html\">"+t.encode('utf-8')+"</a></br>\n")
+        filetop.write("<a href=\""+curlterm+".html\">"+t+"</a></br>\n")
 filetop.write("</body>\n</html>\n")
 filetop.close()
 
-print "Writing alphaleft.html..."
+print ("Writing alphaleft.html...")
 #creates alphabetial list of terms with first letter headers.
-filealpha = open("alphaleft.html", 'w')
+filealpha = open("alphaleft.html", 'w', encoding='utf-8')
 filealpha.write("<html>\n")
 filealpha.write("<head>\n")
 #next line includes autocomplete script and faux searchbar
@@ -165,7 +169,7 @@ filealpha.write('<form name="testing1">\n<input type="text" id="uat-autocomplete
 
 usac = []
 for usc in allconcepts:
-    usac.append(unicode(lit(usc)))
+    usac.append(lit(usc))
 sac = sorted(usac, key=lambda s: s.lower())
 previous = None  
 for c in sac:
@@ -173,11 +177,11 @@ for c in sac:
         previous = c[0].lower()
         filealpha.write("<br /><b><a id='"+c[0]+"'>"+c[0]+"</a></b><br/><br/>")
     urlterm = c.replace(" ", "+").replace("/", "_")
-    curl = urlterm.encode('utf-8')
+    curl = urlterm
     if c in deprecated:
-        filealpha.write("<del><a href=\"termrecords/"+curl+".html\" target='rightframe'>"+c.encode('utf-8')+"</a></del></br>\n")
+        filealpha.write("<del><a href=\"termrecords/"+curl+".html\" target='rightframe'>"+c+"</a></del></br>\n")
     else:
-        filealpha.write("<a href=\"termrecords/"+curl+".html\" target='rightframe'>"+c.encode('utf-8')+"</a></br>\n")
+        filealpha.write("<a href=\"termrecords/"+curl+".html\" target='rightframe'>"+c+"</a></br>\n")
 #next line for autocomplete script and faux searchbar
 filealpha.write('</body>\n<script>\n$("#uat-autocomplete-single").uatAutocomplete()\n\n$("#uat-autocomplete-multi").uatAutocomplete({\n    multi: true\n})\n</script>\n')
 
@@ -201,11 +205,11 @@ def sortlist(unsortedlist):
 def buildlist(termlist, filename):
     for xt in sortlist(termlist):
         xtr = lit(xt)
-        urlxt = xtr.replace(" ", "+").replace("/", "_").encode('utf-8')
+        urlxt = xtr.replace(" ", "+").replace("/", "_")
         if xtr in deprecated:
-            filename.write("<li><del><a target='basefrm' href=\"termrecords/"+urlxt+".html\">"+lit(xt).encode('utf-8')+"</a></del>")
+            filename.write("<li><del><a target='basefrm' href=\"termrecords/"+urlxt+".html\">"+lit(xt)+"</a></del>")
         else:
-            filename.write("<li><a target='basefrm' href=\"termrecords/"+urlxt+".html\">"+lit(xt).encode('utf-8')+"</a>")
+            filename.write("<li><a target='basefrm' href=\"termrecords/"+urlxt+".html\">"+lit(xt)+"</a>")
         yt = getnarrowerterms(xt)
         if yt != None:
             filename.write("\n<ul class='treeview'>\n")
@@ -214,8 +218,8 @@ def buildlist(termlist, filename):
             filename.write("</li>\n")
     filename.write("</ul></li>\n")
 
-print "Writing tree.html..."
-filetree = open("tree.html", 'w')
+print ("Writing tree.html...")
+filetree = open("tree.html", 'w', encoding='utf-8')
 filetree.write("<html>\n")
 filetree.write("<head>\n<title>UAT Hierarchy Tree View</title>\n")
 filetree.write("<script type='text/javascript' src='simpletreemenu.js'>\n")
@@ -245,4 +249,4 @@ filetree.write("</body>\n</html>")
 
 filetree.close()
 
-print "Finished. See toplevelconcepts.html, alphaleft.html, tree.html, and the termrecords folder"
+print ("Finished. See toplevelconcepts.html, alphaleft.html, tree.html, and the termrecords folder")

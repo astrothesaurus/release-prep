@@ -5,7 +5,7 @@ print ("Writing web json file...")
 
 alluat = []
 #writes an html file for each term
-for t in allnondep:
+for t in allconcepts:
     #urlterm = unicode(lit(t)).replace(" ", "+").replace("/", "_")
     #get all the info for each term
     onecon = {}
