@@ -249,7 +249,7 @@ print ("\nCreating flat list csv file...")
 
 print ("\nCreating 'related to' CSV list...")
 # list of all "related conecpt" links
-exec(open("transformations/UAT_SKOS_to_related_list.py").read())
+#exec(open("transformations/UAT_SKOS_to_related_list.py").read())
 # working, 12/16/2020
 
 print ("\nFinished with all scripts!")

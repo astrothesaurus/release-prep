@@ -246,7 +246,6 @@ for oldcon in allprevconcepts:
     if oldex != None:
         examplelist.append([oldcon,oldex])
 
-
 for newcon in allnewconcepts:
     newdef = getdefinition(newcon,g)
     newscope = getscopenotes(newcon,g)
@@ -254,9 +253,7 @@ for newcon in allnewconcepts:
     litterm = lit(newcon)
 
     if newdef != None:
-        if [newcon,newdef] in deflist:
-            pass
-        else:
+        if [newcon,newdef] not in deflist:
             wr.writerow(("Definition",newcon[30:],"| ",newcon," |",litterm," |",newdef," |"))
 
     if newscope != None:

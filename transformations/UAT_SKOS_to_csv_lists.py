@@ -78,7 +78,7 @@ wr5.writerow(["preferred term"]+["scope notes"]+["examples"]+["definition"])
 
 
 getinfo(allconcepts)
-getinfo(alldepconcepts)
+#getinfo(alldepconcepts)
 
 resultFile.close()
 resultFile2.close()
