@@ -33,7 +33,7 @@ out_df = pd.DataFrame.from_dict(GLOBAL_OUT_LIST)
 t_out_list = []
 for term in alltopconcepts:
     descend(term, [], t_out_list)
-print (t_out_list)
+#print (t_out_list)
 
 #counts the number of columns in the data frame and creates the header row.
 numofcol = len(out_df.columns)
@@ -43,8 +43,9 @@ for i in range(1,numofcol+1):
     colnames.append(col)
 out_df.columns = [colnames]
 
+
 #sorts the resulting csv file alphabetically
-#out_df_final = out_df.sort_values(colnames)
+#out_df.sort_values(by=["level 1"])
 
 #utf-8-sig encoding fixs umlauts, etc, in the output csv.
 out_df.to_csv('uat'+timestamp+'.csv', encoding='utf-8-sig',index=False)
