@@ -20,6 +20,7 @@ for t in allconcepts:
     chnotations = getchangenotes(t)
     scnotations = getscopenotes(t)
     termexample = getexample(t)
+    defs = getdefinition(t)
 
     #create file for this particular term
     fileterm = open("termrecords\\"+urlterm+".html", 'w', encoding='utf-8')
@@ -96,6 +97,27 @@ for t in allconcepts:
             print (at)
             fileterm.write("<dd>"+at+"</dd>\n")
         fileterm.write("</p>\n")
+
+    #definitions
+    if defs != None:
+        fileterm.write("<p><dt><i>Definition</i>:</dt>\n")
+
+        if ednotations != None:
+            for x in ednotations:
+                print(x)
+                if x["title"] == rdflib.term.Literal('Definition Provenance'):
+                    print ("yes")
+                    source = x["comment"]
+        
+                    fileterm.write("<dd>"+defs+"<br/>&nbsp;&nbsp;&nbsp;&nbsp; - <cite>"+source+"</cite></dd>\n")
+                else:
+                    print("no")
+        else:
+            fileterm.write("<dd>"+defs+"</dd>\n")
+
+        fileterm.write("</p>\n")
+
+
 
     #examples
     if termexample != None:
