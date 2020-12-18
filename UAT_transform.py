@@ -227,12 +227,12 @@ print ("\nCreating HTML files for the web browsers...")
 
 print ("\nCreating CSV hierarchy flatfile...")
 # csv version of the UAT
-exec(open("transformations/UAT_SKOS_to_flatfile.py").read())
+#exec(open("transformations/UAT_SKOS_to_flatfile.py").read())
 # working, 12/16/2020
 
 print ("\nCreating json files for sorting tool and other...")
 # used in the sorting tool
-#exec(open("transformations/UAT_SKOS_to_dendrogram.py").read())
+exec(open("transformations/UAT_SKOS_to_dendrogram.py").read())
 #flat list for uat flask site
 #exec(open("transformations/UAT_SKOS_to_webjson.py").read())
 #better flat list
