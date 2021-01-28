@@ -255,7 +255,7 @@ filetree.write("<link rel='stylesheet' type='text/css' href='simpletree.css' />\
 filetree.write("<meta charset='utf-8'></head>\n<body>\n")
 filetree.write("</head>\n")
 filetree.write("</body>\n")
-filetree.write("<h4>Unified Astronom Thesaurus</h4>\n")
+filetree.write("<h4>Unified Astronomy Thesaurus</h4>\n")
 filetree.write("<div class='advmenu'>\n")
 filetree.write("<a href=\"javascript:ddtreemenu.flatten('treemenu1', 'expand')\">expand all</a> | <a href=\"javascript:ddtreemenu.flatten('treemenu1', 'collapse')\">collapse all</a>\n")
 filetree.write("</div>\n")
