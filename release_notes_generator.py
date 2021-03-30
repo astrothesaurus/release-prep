@@ -24,7 +24,7 @@ print ("Reading the SKOS file...this may take a few seconds.")
 uat_new = "UAT.rdf" # filename for the new version
 
 #get previous version RDF from GitHub
-uat_prev = "uat-old.rdf" # filename for the previous version
+uat_prev = "4.0.0/UAT.rdf" # filename for the previous version
 
 ##### Shared Functions and Variables #####
 ##### do NOT edit this section #####

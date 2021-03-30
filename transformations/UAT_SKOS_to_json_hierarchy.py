@@ -142,7 +142,7 @@ astro_thes["deprecated"] = alldep
 print (astro_thes)
 
 #all uat in one file
-js_file = open("uat_hierarchy"+timestamp+".json", "w")
+js_file = open("uat_"+timestamp+".json", "w")
 js_file.write(json.dumps(astro_thes))
 
 js_file.close()

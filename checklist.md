@@ -8,9 +8,13 @@
 
 ### Week of Release (Monday - Thursday)
 * Export UAT RDF from management tool
+  * Project > Export > RDF Project Export
+  * Format: RDF/XML
+  * Thesaurus Data: Concepts, Deprecated Concepots, SKOS Notes 
 * Generate updated UAT files (see UAT_transform.py)
-  * html for [concept records](http://wolba.ch/astrothesaurus/uat/termrecords) that support [alphabetical](http://wolba.ch/astrothesaurus/uat/alpha.html) and [hierarchical](http://wolba.ch/astrothesaurus/uat/hierarchy.html) browsers
-  * json for [sorting tool](http://uat.wolba.ch)
+  * json for UAT Apps
+    * split into top level groups (split_uat_on_top_level_terms.py) for the [sorting tool](http://uat.wolba.ch)
+    * UAT_list for browsing and searching interface
   * javascript for @aholachek's [autocomplete widget](http://astrothesaurus.org/thesaurus/autocomplete-widget/)
 * Write UAT Release Notes (see release_notes_generator.py)
   * summary notes & full notes

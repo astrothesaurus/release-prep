@@ -222,39 +222,40 @@ def getallchilds(term, childlist):
 
 print ("\nCreating HTML files for the web browsers...")
 # alpha and hierarchy pages, term recprds
+# no longer needed as of 3/31/2021, due to new browse interface
 #exec(open("transformations/UAT_SKOS_to_html.py").read())
 # working, 12/16/2020
 
 print ("\nCreating CSV hierarchy flatfile...")
 # csv version of the UAT
-#exec(open("transformations/UAT_SKOS_to_flatfile.py").read())
+exec(open("transformations/UAT_SKOS_to_flatfile.py").read())
 # working, 12/16/2020
 
 print ("\nCreating json files for sorting tool and other...")
 # used in the sorting tool
 exec(open("transformations/UAT_SKOS_to_dendrogram.py").read())
 #flat list for uat flask site
-#exec(open("transformations/UAT_SKOS_to_webjson.py").read())
+exec(open("transformations/UAT_SKOS_to_webjson.py").read())
 #better flat list
-#exec(open("transformations/UAT_SKOS_to_fulljson.py").read())
+exec(open("transformations/UAT_SKOS_to_fulljson.py").read())
 #expanded hierarchy version
-#exec(open("transformations/UAT_SKOS_to_json_hierarchy.py").read())
+exec(open("transformations/UAT_SKOS_to_json_hierarchy.py").read())
 # all working, 12/16/2020
 
 print ("\nCreating javascript for autocomplete...")
 # Alex Holachek's autocomplete widget
-#exec(open("transformations/UAT_SKOS_to_autocomplete.py").read())
+exec(open("transformations/UAT_SKOS_to_autocomplete.py").read())
 # working, 12/16/2020
 
 print ("\nCreating flat list csv file...")
 # single list of all unique concepts
 # includes all notes?
-#exec(open("transformations/UAT_SKOS_to_csv_lists.py").read())
+exec(open("transformations/UAT_SKOS_to_csv_lists.py").read())
 # working, 12/16/2020
 
 print ("\nCreating 'related to' CSV list...")
 # list of all "related conecpt" links
-#exec(open("transformations/UAT_SKOS_to_related_list.py").read())
+exec(open("transformations/UAT_SKOS_to_related_list.py").read())
 # working, 12/16/2020
 
 print ("\nFinished with all scripts!")

@@ -86,7 +86,7 @@ astro_thes["deprecated"] = "the concepts here?"
 print (astro_thes)
 
 #all uat in one file
-js_file = open("uat_"+timestamp+".json", "w")
+js_file = open("uat_simple_"+timestamp+".json", "w")
 js_file.write(json.dumps(astro_thes))
 
 js_file.close()

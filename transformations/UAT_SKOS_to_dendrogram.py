@@ -35,7 +35,7 @@ for t in allconcepts:
     "uri": t
     }
 
-print (flat_j)
+#print (flat_j)
 
 
 def recurse_traverse(info_dict, name_of_dict, flat_j):
