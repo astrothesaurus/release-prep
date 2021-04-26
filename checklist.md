@@ -35,3 +35,4 @@
   * [UAT Browse and Search App](https://uat.wolba.ch/uat/)
 * Troubleshoot anything that didn't update or is broken
 * Update current version number on [UAT homepage](http://astrothesaurus.org/)
+* Update current version number on [UAT About Page](https://astrothesaurus.org/about/)
