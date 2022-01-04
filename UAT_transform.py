@@ -14,9 +14,9 @@ timestamp = datetime.now().strftime("%Y_%m%d_%H%M")
 
 ##### RDF File Location #####
 ##### assign this variable to location of UAT SKOS-RDF file exported from VocBench ##### 
-rdf = "UAT.rdf"
-skosnotes = "UAT_skosnotes.rdf"
-depc = "UAT_deprecatedConcepts.rdf" 
+rdf = "uat_new.rdf"
+skosnotes = "uat_new_skos.rdf"
+depc = "uat_new_deprecated.rdf" 
 
 ##### Shared Functions and Variables #####
 ##### do NOT edit this section #####
@@ -182,16 +182,24 @@ def getdefinition(term):
         return deftest
 
 #a function to return the human readable form of the prefered version of a term
+#returns default English only
 def lit(term):
     d = rdflib.term.URIRef(term)
     for prefterm in g.objects(subject=d, predicate=prefLabel):
         return prefterm
 
+#a function to return the human readable form of the prefered version of a term
+#returns Pref Labels in all languages
+def lit2(term):
+    d = rdflib.term.URIRef(term)
+    prefList = []
+    for prefterm in g.objects(subject=d, predicate=prefLabel):
+        prefList.append(prefterm)
+    return prefList
+
 def getlabel(term):
     d = rdflib.term.URIRef(term)
     for deplabel in k.objects(subject=d, predicate=label):
-        print ("this")
-        print (deplabel)
         return deplabel
 
 #returns a list of all deprecated terms in the file
@@ -233,18 +241,18 @@ exec(open("transformations/UAT_SKOS_to_flatfile.py").read())
 
 print ("\nCreating json files for sorting tool and other...")
 # used in the sorting tool
-exec(open("transformations/UAT_SKOS_to_dendrogram.py").read())
+#exec(open("transformations/UAT_SKOS_to_dendrogram.py").read())
 #flat list for uat flask site
-exec(open("transformations/UAT_SKOS_to_webjson.py").read())
+#exec(open("transformations/UAT_SKOS_to_webjson.py").read())
 #better flat list
-exec(open("transformations/UAT_SKOS_to_fulljson.py").read())
+#exec(open("transformations/UAT_SKOS_to_fulljson.py").read())
 #expanded hierarchy version
-exec(open("transformations/UAT_SKOS_to_json_hierarchy.py").read())
+#exec(open("transformations/UAT_SKOS_to_json_hierarchy.py").read())
 # all working, 12/16/2020
 
 print ("\nCreating javascript for autocomplete...")
 # Alex Holachek's autocomplete widget
-exec(open("transformations/UAT_SKOS_to_autocomplete.py").read())
+#exec(open("transformations/UAT_SKOS_to_autocomplete.py").read())
 # working, 12/16/2020
 
 print ("\nCreating flat list csv file...")
@@ -255,7 +263,7 @@ exec(open("transformations/UAT_SKOS_to_csv_lists.py").read())
 
 print ("\nCreating 'related to' CSV list...")
 # list of all "related conecpt" links
-exec(open("transformations/UAT_SKOS_to_related_list.py").read())
+#exec(open("transformations/UAT_SKOS_to_related_list.py").read())
 # working, 12/16/2020
 
 print ("\nFinished with all scripts!")
