@@ -14,9 +14,9 @@ timestamp = datetime.now().strftime("%Y_%m%d_%H%M")
 
 ##### RDF File Location #####
 ##### assign this variable to location of UAT SKOS-RDF file exported from VocBench ##### 
-rdf = "uat_new.rdf"
-skosnotes = "uat_new_skos.rdf"
-depc = "uat_new_deprecated.rdf" 
+rdf = "UAT.rdf"
+# skosnotes = "uat_new_skos.rdf"
+# depc = "uat_new_deprecated.rdf" 
 
 ##### Shared Functions and Variables #####
 ##### do NOT edit this section #####
@@ -27,13 +27,13 @@ depc = "uat_new_deprecated.rdf"
 g = rdflib.Graph()
 g.parse((rdf))#.encode('utf8'))
 
-#notes
-h = rdflib.Graph()
-h.parse((skosnotes))#.encode('utf8'))
+# #notes
+# h = rdflib.Graph()
+# h.parse((skosnotes))#.encode('utf8'))
 
-#deprecated
-k = rdflib.Graph()
-k.parse((depc))#.encode('utf8'))
+# #deprecated
+# k = rdflib.Graph()
+# k.parse((depc))#.encode('utf8'))
 
 #defines certain properties within the SKOS-RDF file
 prefLabel = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#prefLabel')
@@ -51,6 +51,7 @@ definition = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#definition'
 comment = rdflib.term.URIRef('http://www.w3.org/2000/01/rdf-schema#comment')
 title = rdflib.term.URIRef('http://purl.org/dc/terms/title')
 label = rdflib.term.URIRef('http://www.w3.org/2000/01/rdf-schema#label')
+dep = rdflib.term.URIRef('http://www.w3.org/2002/07/owl#deprecated')
 
 #a list of all top concepts
 alltopconcepts = [bv for bv in g.subjects(predicate=TopConcept)]
@@ -58,9 +59,8 @@ alltopconcepts = [bv for bv in g.subjects(predicate=TopConcept)]
 #a list of all concepts
 allconcepts = [gm for gm in g.subjects(rdflib.RDF.type, Concept)]
 
-#a list of all concepts
-alldepconcepts = [km for km in k.subjects(rdflib.RDF.type, Concept)]
-
+# #a list of all concepts
+# alldepconcepts = [km for km in k.subjects(rdflib.RDF.type, Concept)]
 
 #find all terms that have the given term listed as a broader term, so they are therefore narrower terms
 def getnarrowerterms(term):
@@ -126,9 +126,9 @@ def getednotes(term):
     d = rdflib.term.URIRef(term)
     # each editorial note in pool party is its own note to iterate over
     edlist = []
-    for ednoteterm in h.objects(subject=d, predicate=ednotes):       
-        for t in h.objects(subject=ednoteterm, predicate=title):
-            for z in h.objects(subject=ednoteterm, predicate=comment):            
+    for ednoteterm in g.objects(subject=d, predicate=ednotes):       
+        for t in g.objects(subject=ednoteterm, predicate=title):
+            for z in g.objects(subject=ednoteterm, predicate=comment):            
                 edlist.append({"title": t, "comment": z})
 
     if edlist == []:
@@ -147,9 +147,9 @@ def getchangenotes(term):
     d = rdflib.term.URIRef(term)
     # each editorial note in pool party is its own note to iterate over
     chlist = []
-    for chnoteterm in h.objects(subject=d, predicate=chnotes):       
-        for t in h.objects(subject=chnoteterm, predicate=title):
-            for z in h.objects(subject=chnoteterm, predicate=comment):            
+    for chnoteterm in g.objects(subject=d, predicate=chnotes):       
+        for t in g.objects(subject=chnoteterm, predicate=title):
+            for z in g.objects(subject=chnoteterm, predicate=comment):            
                 chlist.append({"title": t, "comment": z})
                 
     if chlist == []:
@@ -166,8 +166,11 @@ def getscopenotes(term):
 #a function to return example notes for a term
 def getexample(term):
     d = rdflib.term.URIRef(term)
+    exlist = []
     for termex in g.objects(subject=d, predicate=example):
-        return termex
+        exlist.append(termex)
+    return exlist
+
 
 #a function to return the status of a term    
 def getvocstatus(term):
@@ -186,7 +189,8 @@ def getdefinition(term):
 def lit(term):
     d = rdflib.term.URIRef(term)
     for prefterm in g.objects(subject=d, predicate=prefLabel):
-        return prefterm
+        if prefterm.language == "en": # print only main english language for main pref label
+            return prefterm
 
 #a function to return the human readable form of the prefered version of a term
 #returns Pref Labels in all languages
@@ -199,16 +203,23 @@ def lit2(term):
 
 def getlabel(term):
     d = rdflib.term.URIRef(term)
-    for deplabel in k.objects(subject=d, predicate=label):
+    for deplabel in g.objects(subject=d, predicate=label):
         return deplabel
 
-#returns a list of all deprecated terms in the file
-deprecated = []
-for term in allconcepts:
-    termstats = getvocstatus(term)
-    if termstats == "Deprecated":
-        deprecated.append(lit(term))
 
+def getdepstatus(term):
+    d = rdflib.term.URIRef(term)
+    for depcon in g.objects(subject=d, predicate=dep):
+        return depcon
+
+#returns a list of all deprecated terms in the file
+alldepconcepts = []
+for term in allconcepts:
+    depstatus = (getdepstatus(term))
+    if str(depstatus) == "true":
+        alldepconcepts.append(term)
+
+#print(deprecated)
 
 def getallchilds(term, childlist):
     childs = getnarrowerterms(term)
@@ -236,13 +247,13 @@ print ("\nCreating HTML files for the web browsers...")
 
 print ("\nCreating CSV hierarchy flatfile...")
 # csv version of the UAT
-exec(open("transformations/UAT_SKOS_to_flatfile.py").read())
+#exec(open("transformations/UAT_SKOS_to_flatfile.py").read())
 # working, 12/16/2020
 
 print ("\nCreating json files for sorting tool and other...")
-# used in the sorting tool
+# used in the sorting tool, can i use the expanded hierarchy instead?
 #exec(open("transformations/UAT_SKOS_to_dendrogram.py").read())
-#flat list for uat flask site
+#flat list for uat flask site, for the new browser?
 #exec(open("transformations/UAT_SKOS_to_webjson.py").read())
 #better flat list
 #exec(open("transformations/UAT_SKOS_to_fulljson.py").read())
@@ -258,12 +269,12 @@ print ("\nCreating javascript for autocomplete...")
 print ("\nCreating flat list csv file...")
 # single list of all unique concepts
 # includes all notes?
-exec(open("transformations/UAT_SKOS_to_csv_lists.py").read())
+#exec(open("transformations/UAT_SKOS_to_csv_lists.py").read())
 # working, 12/16/2020
 
 print ("\nCreating 'related to' CSV list...")
 # list of all "related conecpt" links
-#exec(open("transformations/UAT_SKOS_to_related_list.py").read())
+exec(open("transformations/UAT_SKOS_to_related_list.py").read())
 # working, 12/16/2020
 
 print ("\nFinished with all scripts!")

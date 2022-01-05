@@ -12,10 +12,13 @@ f.close()
 childrenterms =  data['children']
 
 for i in childrenterms:
+    print(i)
     q = i['name']
-    d = q.lower().replace(" ","_").replace("(","").replace(")","")
-    g = open(d+".json",'w')
-    s = json.dumps(i)
-    g.write(s)
+    if q != None: # skip deprecated concepts
+        print(q)
+        d = q.lower().replace(" ","_").replace("(","").replace(")","")
+        g = open(d+".json",'w')
+        s = json.dumps(i)
+        g.write(s)
 
-    g.close()
+        g.close()

@@ -11,66 +11,68 @@ print ("You can ignore the UnicodeWarning if you get one...")
 flat_j = {}
 
 for t in allconcepts:
-    litt = (lit(t))
-    
-    p = getbroaderterms(t)
-    c = getnarrowerterms(t)
-    alts = getaltterms(t)
- 
-    pl = []
-    rcl = []
-    
-    if p == None:
-        pl = ["astro_thes"]
-    else:
-        for x in p:
-            y = (lit(x))
-            pl.append(y)
 
-    if c == None:
-        pass
-    else:
-        for x in c:
-            y = (lit(x))
-            rcl.append(y)
+    if getdepstatus(t) == None: # if concept is NOT deprecated
+        litt = (lit(t))
+        
+        p = getbroaderterms(t)
+        c = getnarrowerterms(t)
+        alts = getaltterms(t)
+     
+        pl = []
+        rcl = []
+        
+        if p == None:
+            pl = ["astro_thes"]
+        else:
+            for x in p:
+                y = (lit(x))
+                pl.append(y)
 
-    rts = getrelatedterms(t)
-    rtlist = []
-    if rts != None:
-        for rt in rts:
-            urt = {}
-            urt["name"] = lit(rt)
-            urt["uri"] = rt
-            rtlist.append(urt)
-        #onecon["related"] = rtlist
-    else: 
-        rtlist = None
+        if c == None:
+            pass
+        else:
+            for x in c:
+                y = (lit(x))
+                rcl.append(y)
 
-    # onecon["changeNotes"] = getchangenotes(t)
-    # onecon["scopeNotes"] = getscopenotes(t)
-    # onecon["examples"] = getexample(t)
-    # onecon["definition"] = getdefinition(t)
-    # onecon["editorialNotes"] = getednotes(t)
- 
-    flat_j[litt] = {
+        rts = getrelatedterms(t)
+        rtlist = []
+        if rts != None:
+            for rt in rts:
+                urt = {}
+                urt["name"] = lit(rt)
+                urt["uri"] = rt
+                rtlist.append(urt)
+            #onecon["related"] = rtlist
+        else: 
+            rtlist = None
 
-        "parents" : pl,
-        "children" : [],
-        "real_children": rcl,
-        "uri": t,
-        "altLabels" : alts,
-        "related" : rtlist,
-        "changeNotes" : getchangenotes(t),
-        "scopeNotes" : getscopenotes(t),
-        "examples" : getexample(t),
-        "definition" : getdefinition(t),
-        "editorialNotes" : getednotes(t),
-    }
+        # onecon["changeNotes"] = getchangenotes(t)
+        # onecon["scopeNotes"] = getscopenotes(t)
+        # onecon["examples"] = getexample(t)
+        # onecon["definition"] = getdefinition(t)
+        # onecon["editorialNotes"] = getednotes(t)
+     
+        flat_j[litt] = {
+
+            "parents" : pl,
+            "children" : [],
+            "real_children": rcl,
+            "uri": t,
+            "altLabels" : alts,
+            "related" : rtlist,
+            "changeNotes" : getchangenotes(t),
+            "scopeNotes" : getscopenotes(t),
+            "examples" : getexample(t),
+            "definition" : getdefinition(t),
+            "editorialNotes" : getednotes(t),
+        }
 
     # if alts != None:
     #     flat_j[litt]["altLabels"] = alts
 
-print (flat_j)
+#print (flat_j)
 
 
 def recurse_traverse(info_dict, name_of_dict, flat_j):
@@ -112,11 +114,12 @@ astro_thes = {"children":[]}
 print ("It might be a long pause here as it loops through the UAT...")
 recurse_traverse(astro_thes, "astro_thes", flat_j)
 
-print (astro_thes)
+#print (astro_thes)
 
 alldep = []
 
 for t in alldepconcepts:
+
     onecon = {}
     onecon["uri"] = t
     onecon["name"] = getlabel(t)
@@ -124,11 +127,10 @@ for t in alldepconcepts:
     
 
     chnote = getchangenotes(t)
-    print (chnote)
     uselist = []
     if chnote != None:
         for x in chnote:
-            if x["title"] == rdflib.term.Literal('Use instead'):
+            if str(x["title"]) == 'Use instead':
                 uselist.append(x["comment"])
 
         onecon["useInstead"] = uselist
@@ -139,7 +141,7 @@ for t in alldepconcepts:
 
 astro_thes["deprecated"] = alldep
 
-print (astro_thes)
+#print (astro_thes)
 
 #all uat in one file
 js_file = open("uat_"+timestamp+".json", "w")

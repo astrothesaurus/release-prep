@@ -6,16 +6,10 @@ def descend(term, parents, out_list):
     if lvln != None: #if there are narrower terms...
         for a in lvln:
             children = parents[:]
-            if lit(a) in deprecated:
-                children = parents[:]
-                children.append(lit(term))
-                if children not in out_list:
-                    out_list.append(children)
-            else:
-                children.append(lit(term))
-                if children not in out_list:
-                    out_list.append(children)
-                descend(a, children, GLOBAL_OUT_LIST)
+            children.append(lit(term))
+            if children not in out_list:
+                out_list.append(children)
+            descend(a, children, GLOBAL_OUT_LIST)
     else: #if there are no more narrower terms...
         children = parents[:]
         children.append(lit(term))

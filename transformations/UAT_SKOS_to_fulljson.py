@@ -8,73 +8,73 @@ alluat = []
 for t in allconcepts:
     #urlterm = unicode(lit(t)).replace(" ", "+").replace("/", "_")
     #get all the info for each term
-    onecon = {}
-    onecon["uri"] = t
-    onecon["name"] = lit(t)
-    
-    nts = getnarrowerterms(t)
-    ntlist = []
-    if nts != None:
-        for nt in nts:
-            unt = {}
-            unt["name"] = lit(nt)
-            unt["uri"] = nt
-            ntlist.append(unt)
-        onecon["narrower"] = ntlist
-    else: 
-        onecon["narrower"] = nts
-    
-    bts = getbroaderterms(t)
-    btlist = []
-    if bts != None:
-        for bt in bts:
-            ubt = {}
-            ubt["name"] = lit(bt)
-            ubt["uri"] = bt
-            btlist.append(ubt)
-        onecon["broader"] = btlist
-    else: 
-        onecon["broader"] = bts
 
-    ats = getaltterms(t)
-    onecon["altNames"] = ats
+    if getdepstatus(t) == None: # if concept is NOT deprecated
+        onecon = {}
+        onecon["uri"] = t
+        onecon["name"] = lit(t)
+        
+        nts = getnarrowerterms(t)
+        ntlist = []
+        if nts != None:
+            for nt in nts:
+                unt = {}
+                unt["name"] = lit(nt)
+                unt["uri"] = nt
+                ntlist.append(unt)
+            onecon["narrower"] = ntlist
+        else: 
+            onecon["narrower"] = nts
+        
+        bts = getbroaderterms(t)
+        btlist = []
+        if bts != None:
+            for bt in bts:
+                ubt = {}
+                ubt["name"] = lit(bt)
+                ubt["uri"] = bt
+                btlist.append(ubt)
+            onecon["broader"] = btlist
+        else: 
+            onecon["broader"] = bts
 
-    rts = getrelatedterms(t)
-    rtlist = []
-    if rts != None:
-        for rt in rts:
-            urt = {}
-            urt["name"] = lit(rt)
-            urt["uri"] = rt
-            rtlist.append(urt)
-        onecon["related"] = rtlist
-    else: 
-        onecon["related"] = rts
+        ats = getaltterms(t)
+        onecon["altNames"] = ats
 
-    onecon["changeNotes"] = getchangenotes(t)
-    onecon["scopeNotes"] = getscopenotes(t)
-    onecon["examples"] = getexample(t)
-    onecon["definition"] = getdefinition(t)
-    onecon["editorialNotes"] = getednotes(t)
+        rts = getrelatedterms(t)
+        rtlist = []
+        if rts != None:
+            for rt in rts:
+                urt = {}
+                urt["name"] = lit(rt)
+                urt["uri"] = rt
+                rtlist.append(urt)
+            onecon["related"] = rtlist
+        else: 
+            onecon["related"] = rts
 
-    alluat.append(onecon)
+        onecon["changeNotes"] = getchangenotes(t)
+        onecon["scopeNotes"] = getscopenotes(t)
+        onecon["examples"] = getexample(t)
+        onecon["definition"] = getdefinition(t)
+        onecon["editorialNotes"] = getednotes(t)
+
+        alluat.append(onecon)
 
 
-
+# now go through all the deprecated concepts
 for t in alldepconcepts:
-
+    
     onecon = {}
     onecon["uri"] = t
     onecon["name"] = getlabel(t)
     onecon["status"] = "deprecated"
-    
 
     chnote = getchangenotes(t)
-    print (chnote)
     uselist = []
     if chnote != None:
         for x in chnote:
-            if x["title"] == rdflib.term.Literal('Use instead'):
+            if str(x["title"]) == 'Use instead':
                 uselist.append(x["comment"])
 
         onecon["useInstead"] = uselist

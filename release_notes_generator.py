@@ -21,10 +21,10 @@ print ("Reading the SKOS file...this may take a few seconds.")
 ##### assign this variable to location of UAT SKOS-RDF file exported from VocBench ##### 
 
 ##export RDF/XML Concepts
-uat_new = "UAT.rdf" # filename for the new version
+uat_new = "uat_new.rdf" # filename for the new version
 
 #get previous version RDF from GitHub
-uat_prev = "4.0.0/UAT.rdf" # filename for the previous version
+uat_prev = "UAT_4.0.1.rdf" # filename for the previous version
 
 ##### Shared Functions and Variables #####
 ##### do NOT edit this section #####
@@ -224,7 +224,7 @@ for newcon in allnewconcepts:
             if [newcon,x] in relatedlist:
                 pass
             else:
-                wr.writerow(("Related",newcon[30:],"| ",newcon," |",litterm," | ",x," | ",littermx," |"))
+                wr.writerow(("Related",newcon[30:],"| ",newcon," | ",litterm," | ",x," | ",littermx," |"))
 
 
 
@@ -254,20 +254,20 @@ for newcon in allnewconcepts:
 
     if newdef != None:
         if [newcon,newdef] not in deflist:
-            wr.writerow(("Definition",newcon[30:],"| ",newcon," |",litterm," |",newdef," |"))
+            wr.writerow(("Definition",newcon[30:],"| ",newcon," | ",litterm," | ",newdef," |"))
 
     if newscope != None:
         if [newcon,newscope] in scopelist:
             pass
         else:
-            wr.writerow(("Scope Note",newcon[30:],"| ",newcon," |",litterm," |",newscope," |"))
+            wr.writerow(("Scope Note",newcon[30:],"| ",newcon," | ",litterm," | ",newscope," |"))
 
     if newex != []:
         if [newcon,newex] in examplelist:
             pass
         else:
             nex = ", ".join(newex)
-            wr.writerow(("Example",newcon[30:],"| ",newcon," |",litterm," |",nex," |"))
+            wr.writerow(("Example",newcon[30:],"| ",newcon," | ",litterm," | ",nex," |"))
 
 
 #gets removed related links
@@ -275,7 +275,7 @@ for a in relatedlist:
     if a in newrelatedlist:
         pass
     else:
-        wr.writerow(("Removed Related",a[0][30:],"| ",a[0]," |",deplit(a[0])," |",a[1]," |",deplit(a[1])," |"))
+        wr.writerow(("Removed Related",a[0][30:],"| ",a[0]," | ",deplit(a[0])," | ",a[1]," | ",deplit(a[1])," |"))
 
 fileout.close()
 
