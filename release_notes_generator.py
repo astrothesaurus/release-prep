@@ -68,7 +68,6 @@ def deplit(term):
     for prefterm in f.objects(subject=d, predicate=prefLabel):
         return prefterm
 
-
 #a function to get a list of all alt terms for a term
 def getaltterms(term,version):
     terminal = rdflib.term.URIRef(term)
@@ -133,7 +132,7 @@ def getdefinition(term,sf):
         return deftest
 
 
-fileout = open('changes_'+timestamp+'.csv','w', encoding='utf-8', newline='')
+fileout = open('release_note_helper_'+timestamp+'.csv','w', encoding='utf-8', newline='')
 
 csv_out = csv.writer(fileout, lineterminator='\n', delimiter=',')
 wr = csv.writer(fileout,quoting=csv.QUOTE_ALL)#

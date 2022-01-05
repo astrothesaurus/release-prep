@@ -18,7 +18,7 @@ for t in allconcepts:
         onecon["ednotes"] = getednotes(t)
         onecon["chnotes"] = getchangenotes(t)
         onecon["scnotes"] = getscopenotes(t)
-        onecon["exnotes"] = getexample(t)
+        onecon["examples"] = getexample(t)
         onecon["defnote"] = getdefinition(t)
 
         #print(getdefinition(t))
@@ -66,7 +66,7 @@ for t in allconcepts:
 
 
 #all uat in one file
-js_file = open("uat_list"+timestamp+".json", "w")
+js_file = open("uat_list_webjson"+timestamp+".json", "w")
 js_file.write(json.dumps(alluat))
 
 js_file.close()

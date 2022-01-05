@@ -55,7 +55,7 @@ for t in allconcepts:
 
         onecon["changeNotes"] = getchangenotes(t)
         onecon["scopeNotes"] = getscopenotes(t)
-        onecon["examples"] = getexample(t)
+        onecon["examples"] = getexample(t)    
         onecon["definition"] = getdefinition(t)
         onecon["editorialNotes"] = getednotes(t)
 

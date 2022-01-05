@@ -169,7 +169,11 @@ def getexample(term):
     exlist = []
     for termex in g.objects(subject=d, predicate=example):
         exlist.append(termex)
-    return exlist
+
+    if exlist == []:
+        return None
+    else:
+        return exlist
 
 
 #a function to return the status of a term    
@@ -239,43 +243,52 @@ def getallchilds(term, childlist):
 
 ## New Version Reqs
 
-print ("\nCreating HTML files for the web browsers...")
-# alpha and hierarchy pages, term recprds
-# no longer needed as of 3/31/2021, due to new browse interface
-#exec(open("transformations/UAT_SKOS_to_html.py").read())
-# working, 12/16/2020
-
 print ("\nCreating CSV hierarchy flatfile...")
 # csv version of the UAT
 #exec(open("transformations/UAT_SKOS_to_flatfile.py").read())
-# working, 12/16/2020
+# working 1/5/2022
+
 
 print ("\nCreating json files for sorting tool and other...")
-# used in the sorting tool, can i use the expanded hierarchy instead?
+# UAT_dendrogram.json
+# simplified concept information, organized in a hierarchy
+# used in the dendrogram sorting tool
+# split this file using split_uat_on_top_level_terms.py
+# for the dendrogram on the UAT website
+# working 1/5/2022
 #exec(open("transformations/UAT_SKOS_to_dendrogram.py").read())
-#flat list for uat flask site, for the new browser?
-#exec(open("transformations/UAT_SKOS_to_webjson.py").read())
-#better flat list
-#exec(open("transformations/UAT_SKOS_to_fulljson.py").read())
-#expanded hierarchy version
+
+# UAT_list.json
+# expanded concept information, organized in a list of concepts
+# no hierarchy structure, used to assist searching in UAT website
+# working 1/5/2022
+#exec(open("transformations/UAT_SKOS_to_json_list.py").read())
+
+# UAT.json
+# expanded UAT Hierarchy organized in a json format
+# working 1/5/2022
 #exec(open("transformations/UAT_SKOS_to_json_hierarchy.py").read())
-# all working, 12/16/2020
+
+# nothing needs this file, I think?
+# working 1/5/2022
+#exec(open("transformations/UAT_SKOS_to_webjson.py").read())
+
 
 print ("\nCreating javascript for autocomplete...")
 # Alex Holachek's autocomplete widget
+# working 1/5/2022
 #exec(open("transformations/UAT_SKOS_to_autocomplete.py").read())
-# working, 12/16/2020
+
 
 print ("\nCreating flat list csv file...")
 # single list of all unique concepts
 # includes all notes?
-#exec(open("transformations/UAT_SKOS_to_csv_lists.py").read())
-# working, 12/16/2020
+# various CSV list files, including a only unique concepts, concepts
+# and notes, list of all relatted concept links, multilanguage list,
+# concepts and uris, concepts and alts
+# working 1/5/2022
+exec(open("transformations/UAT_SKOS_to_csv_lists.py").read())
 
-print ("\nCreating 'related to' CSV list...")
-# list of all "related conecpt" links
-exec(open("transformations/UAT_SKOS_to_related_list.py").read())
-# working, 12/16/2020
 
 print ("\nFinished with all scripts!")
 

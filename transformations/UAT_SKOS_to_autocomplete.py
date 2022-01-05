@@ -3,19 +3,20 @@
 #lists terms and their preferred form in pairs
 pl = []
 for t in allconcepts:
-    litt = lit(t)
-    p = getaltterms(t)
-    
-    flat_j = '{value:"'+litt+'",label:"'+litt+'",uri:"'+t+'"}'
-    pl.append(flat_j)
-
-    if p == None:
-    	pass
+    if getdepstatus(t) == None: # if concept is NOT deprecated  
+        litt = lit(t)
+        p = getaltterms(t)
         
-    else:
-        for y in p:        	
-            flat_j1 = '{value:"'+litt+'",label:"'+y+' ('+litt+')'+'",uri:"'+t+'"}'
-            pl.append(flat_j1)
+        flat_j = '{value:"'+litt+'",label:"'+litt+'",uri:"'+t+'"}'
+        pl.append(flat_j)
+
+        if p == None:
+        	pass
+            
+        else:
+            for y in p:        	
+                flat_j1 = '{value:"'+litt+'",label:"'+y+' ('+litt+')'+'",uri:"'+t+'"}'
+                pl.append(flat_j1)
             
 #joins this list of pairs into a string
 q = u','.join(pl).encode('utf-8').strip()
