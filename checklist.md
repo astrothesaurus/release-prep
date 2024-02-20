@@ -12,6 +12,7 @@
   * Format: RDF/XML
   * Thesaurus Data: Concepts, Deprecated Concepots, SKOS Notes 
 * Generate updated UAT files (see UAT_transform.py)
+  * check that uat-chooser works
   * json for UAT Apps
     * split into top level groups (split_uat_on_top_level_terms.py) for the [sorting tool](http://uat.wolba.ch)
     * UAT_list for browsing and searching interface
