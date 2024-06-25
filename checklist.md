@@ -14,7 +14,7 @@
 * Generate updated UAT files (see UAT_transform.py)
   * check that uat-chooser works
   * json for UAT Apps
-    * split into top level groups (split_uat_on_top_level_terms.py) for the [sorting tool](http://uat.wolba.ch)
+    * split into top level groups (split_uat_on_top_level_terms.py) for the [sorting tool](https://uat.astrothesaurus.org/)
     * UAT_list for browsing and searching interface
   * javascript for @aholachek's [autocomplete widget](http://astrothesaurus.org/thesaurus/autocomplete-widget/)
 * Write UAT Release Notes (see release_notes_generator.py)
@@ -32,8 +32,8 @@
 * Check webtools to make sure everything updated/didn't break:
   * [AAS Journal Submission](http://aas.msubmit.net/)
   * [UAT Concept Selector](http://astrothesaurus.org/concept-select/)
-  * [UAT Sorting Tool](https://uat.wolba.ch/sort)
-  * [UAT Browse and Search App](https://uat.wolba.ch/uat/)
+  * [UAT Sorting Tool](https://uat.astrothesaurus.org/)
+  * [UAT Browse and Search App](https://astrothesaurus.org/thesaurus/search-the-uat/)
 * Troubleshoot anything that didn't update or is broken
 * Update current version number on [UAT homepage](http://astrothesaurus.org/)
 * Update current version number on [UAT About Page](https://astrothesaurus.org/about/)
