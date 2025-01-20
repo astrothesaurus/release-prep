@@ -9,9 +9,31 @@ import csv
 from datetime import datetime
 
 import rdflib
+import requests
 from rdflib import URIRef
 
 timestamp = datetime.now().strftime("%Y_%m%d_%H%M")
+
+def get_latest_uat_rdf():
+    url = "https://api.github.com/repos/astrothesaurus/UAT/releases/latest"
+    response = requests.get(url)
+    if response.status_code == 200:
+        latest_release = response.json()
+        tag = latest_release.get('tag_name')
+        download_url = "https://raw.githubusercontent.com/astrothesaurus/UAT/" + tag + "/UAT.rdf"
+        rdf_response = requests.get(download_url)
+        if rdf_response.status_code == 200:
+            file_path = 'UAT.rdf'
+            with open(file_path, 'wb') as file:
+                file.write(rdf_response.content)
+                print("Downloaded the latest UAT.rdf file.")
+                return file_path
+        else:
+            print("Failed to download the latest UAT.rdf file.")
+            return None
+    else:
+        print("Failed to get the latest release.")
+        return None
 
 print ("Reading the SKOS file...this may take a few seconds.")
 ##### RDF File Location #####
@@ -19,9 +41,6 @@ print ("Reading the SKOS file...this may take a few seconds.")
 
 ##export RDF/XML Concepts
 uat_new = "uat_new.rdf" # filename for the new version
-
-#get previous version RDF from GitHub
-uat_prev = "UAT_4.0.1.rdf" # filename for the previous version
 
 ##### Shared Functions and Variables #####
 ##### do NOT edit this section #####
@@ -31,7 +50,7 @@ g = rdflib.Graph()
 result = g.parse(uat_new)#.encode('utf8'))
 
 f = rdflib.Graph()
-result = f.parse(uat_prev)#.encode('utf8'))
+result = f.parse(get_latest_uat_rdf())#.encode('utf8'))
 
 w3baseUrl: str = 'https://www.w3.org/2009/08/skos-reference/skos.html#'
 
@@ -103,7 +122,7 @@ def getexample(term,sf):
         exlist.append(termex)
     return exlist
 
-#a function to return the status of a term    
+#a function to return the status of a term
 def getdefinition(term,sf):
     d=rdflib.term.URIRef(term)
     for deftest in sf.objects(subject=d, predicate=definition):
