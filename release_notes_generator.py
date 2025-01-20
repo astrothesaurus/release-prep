@@ -4,15 +4,12 @@
 ## new related links, new alt labels, new pref labels, etc etc.
 ## Data is useful in creating the release notes
 
-import os
 import csv
-import json
-import codecs
-import shutil
-import rdflib
-import unicodedata
-#import pandas as pd
+# import pandas as pd
 from datetime import datetime
+
+import rdflib
+from rdflib import URIRef
 
 timestamp = datetime.now().strftime("%Y_%m%d_%H%M")
 
@@ -36,22 +33,17 @@ result = g.parse(uat_new)#.encode('utf8'))
 f = rdflib.Graph()
 result = f.parse(uat_prev)#.encode('utf8'))
 
+w3baseUrl: str = 'https://www.w3.org/2009/08/skos-reference/skos.html#'
+
 #defines certain properties within the SKOS-RDF file
-prefLabel = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#prefLabel')
-broader = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#broader')
-Concept = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#Concept')
-vocstatus = rdflib.term.URIRef('http://art.uniroma2.it/ontologies/vocbench#hasStatus')
-altLabel = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#altLabel')
-TopConcept = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#topConceptOf')
-ednotes = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#editorialNote')
-changenotes = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#changeNote')
-scopenotes = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#scopeNote')
-example = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#example')
-related = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#related')
-definition = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#definition')
-comment = rdflib.term.URIRef('http://www.w3.org/2000/01/rdf-schema#comment')
-title = rdflib.term.URIRef('http://purl.org/dc/terms/title')
-label = rdflib.term.URIRef('http://www.w3.org/2000/01/rdf-schema#label')
+prefLabel: URIRef = rdflib.term.URIRef(w3baseUrl + 'prefLabel')
+Concept: URIRef = rdflib.term.URIRef(w3baseUrl + 'Concept')
+altLabel: URIRef = rdflib.term.URIRef(w3baseUrl + 'altLabel')
+scopenotes: URIRef = rdflib.term.URIRef(w3baseUrl + 'scopeNote')
+example: URIRef = rdflib.term.URIRef(w3baseUrl + 'example')
+related: URIRef = rdflib.term.URIRef(w3baseUrl + 'related')
+definition: URIRef = rdflib.term.URIRef(w3baseUrl + 'definition')
+label: URIRef = rdflib.term.URIRef('https://www.w3.org/2000/01/rdf-schema#label')
 
 #a list of all concepts
 allnewconcepts = [gm for gm in g.subjects(rdflib.RDF.type, Concept)]
@@ -94,20 +86,6 @@ def getrelatedterms(term,version):
                 relatedterms[terminal] = [rts]
         return relatedterms[terminal]
     except KeyError:
-        pass  
-
-#a function to get a list of all broader terms for a term
-def getbroaderterms(term,version):
-    terminal = rdflib.term.URIRef(term)
-    broaderterms = {}
-    try:
-        for bts in version.objects(subject=terminal, predicate=broader):
-            try:
-                broaderterms[terminal].append(bts)
-            except KeyError:
-                broaderterms[terminal] = [bts]
-        return broaderterms[terminal]
-    except KeyError:
         pass
 
 
@@ -132,150 +110,148 @@ def getdefinition(term,sf):
         return deftest
 
 
-fileout = open('release_note_helper_'+timestamp+'.csv','w', encoding='utf-8', newline='')
+with open('release_note_helper_'+timestamp+'.csv','w', encoding='utf-8', newline='') as fileout:
 
-csv_out = csv.writer(fileout, lineterminator='\n', delimiter=',')
-wr = csv.writer(fileout,quoting=csv.QUOTE_ALL)#
-#UnicodeWriter(fileout,lineterminator='\n', delimiter=',', dialect='excel',quoting=csv.QUOTE_ALL)
+    csv_out = csv.writer(fileout, lineterminator='\n', delimiter=',')
+    wr = csv.writer(fileout,quoting=csv.QUOTE_ALL)#
+    #UnicodeWriter(fileout,lineterminator='\n', delimiter=',', dialect='excel',quoting=csv.QUOTE_ALL)
 
-##prints all new concepts, new alts, removed alts
+    ##prints all new concepts, new alts, removed alts
 
-for newcon in allnewconcepts:
-    if newcon in allprevconcepts:
-        newalts = getaltterms(newcon, g)
-        oldalts = getaltterms(newcon, f)
+    for newcon in allnewconcepts:
+        if newcon in allprevconcepts:
+            newalts = getaltterms(newcon, g)
+            oldalts = getaltterms(newcon, f)
 
-        copynewalts = getaltterms(newcon, g)
-        copyoldalts = getaltterms(newcon, f)
+            copynewalts = getaltterms(newcon, g)
+            copyoldalts = getaltterms(newcon, f)
 
-        if oldalts == None or newalts == None :
-            pass
+            if oldalts is None or newalts is None:
+                pass
 
+            else:
+                for x in newalts:
+                    if x in oldalts:
+                        copynewalts.remove(x)
+
+                for y in oldalts:
+                    if y in newalts:
+                        copyoldalts.remove(y)
+
+            if copyoldalts is not None and copyoldalts != []:
+                aoldalts = ", ".join(copyoldalts)
+                wr.writerow((["Removed Alts"]+[newcon[30:]]+["| "]+[newcon]+[" | "]+[lit(newcon)]+[" | "]+[aoldalts]+[" |"]))
+
+            if copynewalts is not None and copynewalts != []:
+                anewalts = ", ".join(copynewalts)
+                wr.writerow((["New Alts"]+[newcon[30:]]+["| "]+[newcon]+[" | "]+[lit(newcon)]+[" | "]+[anewalts]+[" |"]))
+
+        #         depaltlist = []
+        #         for y in oldalts:
+        #             if y in newalts:
+        #                 pass
+        #             else:
+        #                 depaltlist.append(y)
+        #         if depaltlist != []:
+        #             for z in depaltlist:
+        #                 if z == lit(newcon):
+        #                     pass
+        #                 else:
+        #                     wr.writerow((["Removed Alts"]+[newcon[30:]]+["| "]+[newcon]+[" | "]+[lit(newcon)]+[" | "]+depaltlist+[" |"]))
         else:
-            for x in newalts:
-                if x in oldalts:
-                    copynewalts.remove(x)
+            litterm = lit(newcon)
+            morealts = getaltterms(newcon, g)
 
-            for y in oldalts:
-                if y in newalts:
-                    copyoldalts.remove(y)
+            wr.writerow(("New concept",newcon[30:],"| ",newcon," | ",litterm," |"))
+            if morealts is not None:
+                amorealts = ", ".join(morealts)
+                wr.writerow((["New Alts"]+[newcon[30:]]+["| "]+[newcon]+[" | "]+[lit(newcon)]+[" | "]+[amorealts]+[" |"]))
 
-        if copyoldalts != None and copyoldalts != []:
-            aoldalts = (", ").join(copyoldalts)
-            wr.writerow((["Removed Alts"]+[newcon[30:]]+["| "]+[newcon]+[" | "]+[lit(newcon)]+[" | "]+[aoldalts]+[" |"]))
-
-        if copynewalts != None and copynewalts != []:
-            anewalts = (", ").join(copynewalts)
-            wr.writerow((["New Alts"]+[newcon[30:]]+["| "]+[newcon]+[" | "]+[lit(newcon)]+[" | "]+[anewalts]+[" |"]))
-
-    #         depaltlist = []
-    #         for y in oldalts:
-    #             if y in newalts:
-    #                 pass
-    #             else:
-    #                 depaltlist.append(y)
-    #         if depaltlist != []:
-    #             for z in depaltlist:
-    #                 if z == lit(newcon):
-    #                     pass
-    #                 else:
-    #                     wr.writerow((["Removed Alts"]+[newcon[30:]]+["| "]+[newcon]+[" | "]+[lit(newcon)]+[" | "]+depaltlist+[" |"]))
-    else:
-        litterm = lit(newcon)        
-        morealts = getaltterms(newcon, g)           
-
-        wr.writerow(("New concept",newcon[30:],"| ",newcon," | ",litterm," |"))
-        if morealts != None:
-            amorealts = (", ").join(morealts)
-            wr.writerow((["New Alts"]+[newcon[30:]]+["| "]+[newcon]+[" | "]+[lit(newcon)]+[" | "]+[amorealts]+[" |"]))
-
-##finds all deprecated concepts
-for oldcon in allprevconcepts:
-    if oldcon in allnewconcepts:
-        oldlit = deplit(oldcon)
-        newlit = lit(oldcon)
-        if oldlit != newlit:
-            wr.writerow(("Updated PrefLabel",oldcon[30:],"| ",oldcon," | ",oldlit," | ",newlit," |"))
-    else:
-        litterm = deplit(oldcon)
-        wr.writerow(("Deprecated concept",oldcon[30:],"| ",oldcon," | ",litterm," |"))
+    ##finds all deprecated concepts
+    for oldcon in allprevconcepts:
+        if oldcon in allnewconcepts:
+            oldlit = deplit(oldcon)
+            newlit = lit(oldcon)
+            if oldlit != newlit:
+                wr.writerow(("Updated PrefLabel",oldcon[30:],"| ",oldcon," | ",oldlit," | ",newlit," |"))
+        else:
+            litterm = deplit(oldcon)
+            wr.writerow(("Deprecated concept",oldcon[30:],"| ",oldcon," | ",litterm," |"))
 
 
-#finds all new related links
-relatedlist = []
+    #finds all new related links
+    relatedlist = []
 
-for oldcon in allprevconcepts:
-    litterm = lit(oldcon)
-    rterms = getrelatedterms(oldcon,f)
-    if rterms != None:
-        for x in rterms:
-            littermx = lit(x)
-            relatedlist.append([oldcon,x])
+    for oldcon in allprevconcepts:
+        litterm = lit(oldcon)
+        rterms = getrelatedterms(oldcon,f)
+        if rterms is not None:
+            for x in rterms:
+                littermx = lit(x)
+                relatedlist.append([oldcon,x])
 
-newrelatedlist = []
-for newcon in allnewconcepts:
-    litterm = lit(newcon)
-    rterms = getrelatedterms(newcon,g)
-    if rterms != None:
-        for x in rterms:
-            littermx = lit(x)
-            newrelatedlist.append([newcon,x])
-            if [newcon,x] in relatedlist:
+    newrelatedlist = []
+    for newcon in allnewconcepts:
+        litterm = lit(newcon)
+        rterms = getrelatedterms(newcon,g)
+        if rterms is not None:
+            for x in rterms:
+                littermx = lit(x)
+                newrelatedlist.append([newcon,x])
+                if [newcon,x] in relatedlist:
+                    pass
+                else:
+                    wr.writerow(("Related",newcon[30:],"| ",newcon," | ",litterm," | ",x," | ",littermx," |"))
+
+
+
+    #finds all new defintions, scope notes, examples
+    deflist = []
+    scopelist = []
+    examplelist = []
+    for oldcon in allprevconcepts:
+        olddef = getdefinition(oldcon,f)
+        oldscope = getscopenotes(oldcon,f)
+        oldex = getexample(oldcon,f)
+
+        if olddef is not None:
+            deflist.append([oldcon,olddef])
+
+        if oldscope is not None:
+            scopelist.append([oldcon,oldscope])
+
+        if oldex is not None:
+            examplelist.append([oldcon,oldex])
+
+    for newcon in allnewconcepts:
+        newdef = getdefinition(newcon,g)
+        newscope = getscopenotes(newcon,g)
+        newex = getexample(newcon,g)
+        litterm = lit(newcon)
+
+        if newdef is not None:
+            if [newcon,newdef] not in deflist:
+                wr.writerow(("Definition",newcon[30:],"| ",newcon," | ",litterm," | ",newdef," |"))
+
+        if newscope is not None:
+            if [newcon,newscope] in scopelist:
                 pass
             else:
-                wr.writerow(("Related",newcon[30:],"| ",newcon," | ",litterm," | ",x," | ",littermx," |"))
+                wr.writerow(("Scope Note",newcon[30:],"| ",newcon," | ",litterm," | ",newscope," |"))
+
+        if newex:
+            if [newcon,newex] in examplelist:
+                pass
+            else:
+                nex = ", ".join(newex)
+                wr.writerow(("Example",newcon[30:],"| ",newcon," | ",litterm," | ",nex," |"))
 
 
-
-#finds all new defintions, scope notes, examples
-deflist = []
-scopelist = []
-examplelist = []
-for oldcon in allprevconcepts:
-    olddef = getdefinition(oldcon,f)
-    oldscope = getscopenotes(oldcon,f)
-    oldex = getexample(oldcon,f)
-
-    if olddef != None:
-        deflist.append([oldcon,olddef])
-
-    if oldscope != None:
-        scopelist.append([oldcon,oldscope])
-
-    if oldex != None:
-        examplelist.append([oldcon,oldex])
-
-for newcon in allnewconcepts:
-    newdef = getdefinition(newcon,g)
-    newscope = getscopenotes(newcon,g)
-    newex = getexample(newcon,g)
-    litterm = lit(newcon)
-
-    if newdef != None:
-        if [newcon,newdef] not in deflist:
-            wr.writerow(("Definition",newcon[30:],"| ",newcon," | ",litterm," | ",newdef," |"))
-
-    if newscope != None:
-        if [newcon,newscope] in scopelist:
+    #gets removed related links
+    for a in relatedlist:
+        if a in newrelatedlist:
             pass
         else:
-            wr.writerow(("Scope Note",newcon[30:],"| ",newcon," | ",litterm," | ",newscope," |"))
-
-    if newex != []:
-        if [newcon,newex] in examplelist:
-            pass
-        else:
-            nex = ", ".join(newex)
-            wr.writerow(("Example",newcon[30:],"| ",newcon," | ",litterm," | ",nex," |"))
-
-
-#gets removed related links
-for a in relatedlist:
-    if a in newrelatedlist:
-        pass
-    else:
-        wr.writerow(("Removed Related",a[0][30:],"| ",a[0]," | ",deplit(a[0])," | ",a[1]," | ",deplit(a[1])," |"))
-
-fileout.close()
+            wr.writerow(("Removed Related",a[0][30:],"| ",a[0]," | ",deplit(a[0])," | ",a[1]," | ",deplit(a[1])," |"))
 
 print ("finished!")

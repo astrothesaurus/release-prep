@@ -9,18 +9,14 @@ for t in allconcepts:
     #urlterm = unicode(lit(t)).replace(" ", "+").replace("/", "_")
     #get all the info for each term
 
-    if getdepstatus(t) == None: # if concept is NOT deprecated
-        onecon = {}
-        onecon["uri"] = t
-        onecon["name"] = lit(t)
-        
+    if getdepstatus(t) is None: # if concept is NOT deprecated
+        onecon = {"uri": t, "name": lit(t)}
+
         nts = getnarrowerterms(t)
         ntlist = []
-        if nts != None:
+        if nts is not None:
             for nt in nts:
-                unt = {}
-                unt["name"] = lit(nt)
-                unt["uri"] = nt
+                unt = {"name": lit(nt), "uri": nt}
                 ntlist.append(unt)
             onecon["narrower"] = ntlist
         else: 
@@ -28,11 +24,9 @@ for t in allconcepts:
         
         bts = getbroaderterms(t)
         btlist = []
-        if bts != None:
+        if bts is not None:
             for bt in bts:
-                ubt = {}
-                ubt["name"] = lit(bt)
-                ubt["uri"] = bt
+                ubt = {"name": lit(bt), "uri": bt}
                 btlist.append(ubt)
             onecon["broader"] = btlist
         else: 
@@ -43,11 +37,9 @@ for t in allconcepts:
 
         rts = getrelatedterms(t)
         rtlist = []
-        if rts != None:
+        if rts is not None:
             for rt in rts:
-                urt = {}
-                urt["name"] = lit(rt)
-                urt["uri"] = rt
+                urt = {"name": lit(rt), "uri": rt}
                 rtlist.append(urt)
             onecon["related"] = rtlist
         else: 
@@ -65,14 +57,11 @@ for t in allconcepts:
 # now go through all the deprecated concepts
 for t in alldepconcepts:
     
-    onecon = {}
-    onecon["uri"] = t
-    onecon["name"] = getlabel(t)
-    onecon["status"] = "deprecated"
+    onecon = {"uri": t, "name": getlabel(t), "status": "deprecated"}
 
     chnote = getchangenotes(t)
     uselist = []
-    if chnote != None:
+    if chnote is not None:
         for x in chnote:
             if str(x["title"]) == 'Use instead':
                 uselist.append(x["comment"])
@@ -84,9 +73,7 @@ for t in alldepconcepts:
 
 
 #all uat in one file
-js_file = open("uat_list"+timestamp+".json", "w")
-js_file.write(json.dumps(alluat))
-
-js_file.close()
+with open("uat_list"+timestamp+".json", "w") as js_file:
+    js_file.write(json.dumps(alluat))
 
 print ("Finished.")

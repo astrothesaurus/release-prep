@@ -1,16 +1,12 @@
 # coding: utf-8
-
-import os
-import json
-import shutil
-import rdflib
-import unicodedata
-import pandas as pd
 from datetime import datetime
+
+import rdflib
+from rdflib import URIRef, Graph
 
 print ("Reading the SKOS file...this may take a few seconds.")
 
-timestamp = datetime.now().strftime("%Y_%m%d_%H%M")
+timestamp: str = datetime.now().strftime("%Y_%m%d_%H%M")
 
 ##### RDF File Location #####
 ##### assign this variable to location of UAT SKOS-RDF file exported from VocBench ##### 
@@ -24,8 +20,8 @@ rdf = "UAT.rdf"
 
 #reads SKOS-RDF file into a RDFlib graph for use in these scripts
 #uat
-g = rdflib.Graph()
-g.parse((rdf))#.encode('utf8'))
+graph: Graph = rdflib.Graph()
+graph.parse(rdf)#.encode('utf8'))
 
 # #notes
 # h = rdflib.Graph()
@@ -35,29 +31,30 @@ g.parse((rdf))#.encode('utf8'))
 # k = rdflib.Graph()
 # k.parse((depc))#.encode('utf8'))
 
+w3baseUrl: str = 'https://www.w3.org/2009/08/skos-reference/skos.html#'
+
 #defines certain properties within the SKOS-RDF file
-prefLabel = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#prefLabel')
-broader = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#broader')
-Concept = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#Concept')
-vocstatus = rdflib.term.URIRef('http://art.uniroma2.it/ontologies/vocbench#hasStatus')
-altLabel = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#altLabel')
-TopConcept = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#topConceptOf')
-ednotes = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#editorialNote')
-chnotes = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#changeNote')
-scopenotes = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#scopeNote')
-example = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#example')
-related = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#related')
-definition = rdflib.term.URIRef('http://www.w3.org/2004/02/skos/core#definition')
-comment = rdflib.term.URIRef('http://www.w3.org/2000/01/rdf-schema#comment')
-title = rdflib.term.URIRef('http://purl.org/dc/terms/title')
-label = rdflib.term.URIRef('http://www.w3.org/2000/01/rdf-schema#label')
-dep = rdflib.term.URIRef('http://www.w3.org/2002/07/owl#deprecated')
+prefLabel: URIRef = rdflib.term.URIRef(w3baseUrl + 'prefLabel')
+broader: URIRef = rdflib.term.URIRef(w3baseUrl + 'broader')
+Concept: URIRef = rdflib.term.URIRef(w3baseUrl + 'Concept')
+altLabel: URIRef = rdflib.term.URIRef(w3baseUrl + 'altLabel')
+TopConcept: URIRef = rdflib.term.URIRef(w3baseUrl + 'topConceptOf')
+ednotes: URIRef = rdflib.term.URIRef(w3baseUrl + 'editorialNote')
+chnotes: URIRef = rdflib.term.URIRef(w3baseUrl + 'changeNote')
+scopenotes: URIRef = rdflib.term.URIRef(w3baseUrl + 'scopeNote')
+example: URIRef = rdflib.term.URIRef(w3baseUrl + 'example')
+related: URIRef = rdflib.term.URIRef(w3baseUrl + 'related')
+definition: URIRef = rdflib.term.URIRef(w3baseUrl + 'definition')
+comment: URIRef = rdflib.term.URIRef('https://www.w3.org/2000/01/rdf-schema#comment')
+title: URIRef = rdflib.term.URIRef('https://www.dublincore.org/specifications/dublin-core/dcmi-terms/#title')
+label: URIRef = rdflib.term.URIRef('https://www.w3.org/2000/01/rdf-schema#label')
+dep: URIRef = rdflib.term.URIRef('https://www.w3.org/2002/07/owl#deprecated')
 
 #a list of all top concepts
-alltopconcepts = [bv for bv in g.subjects(predicate=TopConcept)]
+alltopconcepts = [bv for bv in graph.subjects(predicate=TopConcept)]
 
 #a list of all concepts
-allconcepts = [gm for gm in g.subjects(rdflib.RDF.type, Concept)]
+allconcepts = [gm for gm in graph.subjects(rdflib.RDF.type, Concept)]
 
 # #a list of all concepts
 # alldepconcepts = [km for km in k.subjects(rdflib.RDF.type, Concept)]
@@ -67,7 +64,7 @@ def getnarrowerterms(term):
     narrowerterms = {}
     terminal = rdflib.term.URIRef(term)
     try:
-        for nts in g.subjects(predicate=broader, object=terminal):
+        for nts in graph.subjects(predicate=broader, object=terminal):
             try:
                 narrowerterms[terminal].append(nts)
             except KeyError:
@@ -81,7 +78,7 @@ def getbroaderterms(term):
     terminal = rdflib.term.URIRef(term)
     broaderterms = {}
     try:
-        for bts in g.objects(subject=terminal, predicate=broader):
+        for bts in graph.objects(subject=terminal, predicate=broader):
             try:
                 broaderterms[terminal].append(bts)
             except KeyError:
@@ -95,7 +92,7 @@ def getaltterms(term):
     terminal = rdflib.term.URIRef(term)
     alternateterms = {}
     try:
-        for ats in g.objects(subject=terminal, predicate=altLabel):
+        for ats in graph.objects(subject=terminal, predicate=altLabel):
             try:
                 alternateterms[terminal].append(ats)
             except KeyError:
@@ -112,7 +109,7 @@ def getrelatedterms(term):
     terminal = rdflib.term.URIRef(term)
     relatedterms = {}
     try:
-        for rts in g.objects(subject=terminal, predicate=related):
+        for rts in graph.objects(subject=terminal, predicate=related):
             try:
                 relatedterms[terminal].append(rts)
             except KeyError:
@@ -126,15 +123,14 @@ def getednotes(term):
     d = rdflib.term.URIRef(term)
     # each editorial note in pool party is its own note to iterate over
     edlist = []
-    for ednoteterm in g.objects(subject=d, predicate=ednotes):       
-        for t in g.objects(subject=ednoteterm, predicate=title):
-            for z in g.objects(subject=ednoteterm, predicate=comment):            
+    for ednoteterm in graph.objects(subject=d, predicate=ednotes):
+        for t in graph.objects(subject=ednoteterm, predicate=title):
+            for z in graph.objects(subject=ednoteterm, predicate=comment):
                 edlist.append({"title": t, "comment": z})
 
-    if edlist == []:
+    if not edlist:
         return None
-    else:
-        return edlist
+    return edlist
 
 
 #a function to return change notes for a term
@@ -147,52 +143,43 @@ def getchangenotes(term):
     d = rdflib.term.URIRef(term)
     # each editorial note in pool party is its own note to iterate over
     chlist = []
-    for chnoteterm in g.objects(subject=d, predicate=chnotes):       
-        for t in g.objects(subject=chnoteterm, predicate=title):
-            for z in g.objects(subject=chnoteterm, predicate=comment):            
+    for chnoteterm in graph.objects(subject=d, predicate=chnotes):
+        for t in graph.objects(subject=chnoteterm, predicate=title):
+            for z in graph.objects(subject=chnoteterm, predicate=comment):
                 chlist.append({"title": t, "comment": z})
                 
-    if chlist == []:
+    if not chlist:
         return None
-    else:
-        return chlist
+    return chlist
 
 #a function to return scope notes for a term
 def getscopenotes(term):
     d = rdflib.term.URIRef(term)
-    for scnoteterm in g.objects(subject=d, predicate=scopenotes):
+    for scnoteterm in graph.objects(subject=d, predicate=scopenotes):
         return scnoteterm
 
 #a function to return example notes for a term
 def getexample(term):
     d = rdflib.term.URIRef(term)
     exlist = []
-    for termex in g.objects(subject=d, predicate=example):
+    for termex in graph.objects(subject=d, predicate=example):
         exlist.append(termex)
 
-    if exlist == []:
+    if not exlist:
         return None
-    else:
-        return exlist
-
-
-#a function to return the status of a term    
-def getvocstatus(term):
-    d=rdflib.term.URIRef(term)
-    for vcstatus in g.objects(subject=d, predicate=vocstatus):
-        return vcstatus
+    return exlist
 
 #a function to return the status of a term    
 def getdefinition(term):
     d=rdflib.term.URIRef(term)
-    for deftest in g.objects(subject=d, predicate=definition):
+    for deftest in graph.objects(subject=d, predicate=definition):
         return deftest
 
 #a function to return the human readable form of the prefered version of a term
 #returns default English only
 def lit(term):
     d = rdflib.term.URIRef(term)
-    for prefterm in g.objects(subject=d, predicate=prefLabel):
+    for prefterm in graph.objects(subject=d, predicate=prefLabel):
         if prefterm.language == "en": # print only main english language for main pref label
             return prefterm
 
@@ -200,42 +187,31 @@ def lit(term):
 #returns Pref Labels in all languages
 def lit2(term):
     d = rdflib.term.URIRef(term)
-    prefList = []
-    for prefterm in g.objects(subject=d, predicate=prefLabel):
-        prefList.append(prefterm)
-    return prefList
+    preflist = []
+    for prefterm in graph.objects(subject=d, predicate=prefLabel):
+        preflist.append(prefterm)
+    return preflist
 
 def getlabel(term):
     d = rdflib.term.URIRef(term)
-    for deplabel in g.objects(subject=d, predicate=label):
+    for deplabel in graph.objects(subject=d, predicate=label):
         return deplabel
 
 
 def getdepstatus(term):
     d = rdflib.term.URIRef(term)
-    for depcon in g.objects(subject=d, predicate=dep):
+    for depcon in graph.objects(subject=d, predicate=dep):
         return depcon
 
 #returns a list of all deprecated terms in the file
 alldepconcepts = []
-for term in allconcepts:
-    depstatus = (getdepstatus(term))
-    if str(depstatus) == "true":
-        alldepconcepts.append(term)
-
+def populatedeprecatedterms():
+    for term in allconcepts:
+        depstatus = (getdepstatus(term))
+        if str(depstatus) == "true":
+            alldepconcepts.append(term)
+populatedeprecatedterms()
 #print(deprecated)
-
-def getallchilds(term, childlist):
-    childs = getnarrowerterms(term)
-    if childs != None:
-        for kids in childs:
-            if unicode(lit(kids)) in deprecated:
-                pass
-            else:
-                childlist.append(unicode(lit(kids)))
-                getallchilds(kids, childlist)
-
-
 
 
 ##### Transformation Scripts #####

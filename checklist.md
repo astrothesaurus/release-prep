@@ -22,7 +22,7 @@
 * Prepare and finalize local UAT repo, commit changes
 * Update UAT transformation scripts in GitHub if needed
 * Select new image for website header rotation
-* Write annoucement blog post, schedule for release
+* Write announcement blog post, schedule for release
 * Update this checklist if needed
 
 ### Launch Day (Friday)
@@ -30,10 +30,10 @@
 * Upload new json and javascript files to UAT website
 * Push new version to UAT API
 * Check webtools to make sure everything updated/didn't break:
-  * [AAS Journal Submission](http://aas.msubmit.net/)
-  * [UAT Concept Selector](http://astrothesaurus.org/concept-select/)
+  * [AAS Journal Submission](https://aas.msubmit.net/)
+  * [UAT Concept Selector](https://astrothesaurus.org/concept-select/)
   * [UAT Sorting Tool](https://uat.astrothesaurus.org/)
   * [UAT Browse and Search App](https://astrothesaurus.org/thesaurus/search-the-uat/)
 * Troubleshoot anything that didn't update or is broken
-* Update current version number on [UAT homepage](http://astrothesaurus.org/)
+* Update current version number on [UAT homepage](https://astrothesaurus.org/)
 * Update current version number on [UAT About Page](https://astrothesaurus.org/about/)

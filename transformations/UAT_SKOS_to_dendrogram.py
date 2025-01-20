@@ -7,7 +7,7 @@ flat_j = {}
 
 for t in allconcepts:
 
-    if getdepstatus(t) == None: # if concept is NOT deprecated
+    if getdepstatus(t) is None: # if concept is NOT deprecated
         litt = (lit(t))
         p = getbroaderterms(t)
         c = getnarrowerterms(t)
@@ -15,14 +15,14 @@ for t in allconcepts:
         pl = []
         rcl = []
         
-        if p == None:
+        if p is None:
             pl = ["astro_thes"]
         else:
             for x in p:
                 y = (lit(x))
                 pl.append(y)
 
-        if c == None:
+        if c is None:
             pass
         else:
             for x in c:
@@ -71,11 +71,8 @@ print ("It might be a long pause here as it loops through the UAT...")
 recurse_traverse(astro_thes, "astro_thes", flat_j)
 
 #all uat in one file
-js_file = open("uat_dendrogram_"+timestamp+".json", "w")
-js_file.write(json.dumps(astro_thes))
-
-js_file.close()
-
+with open("uat_dendrogram_"+timestamp+".json", "w") as js_file:
+    js_file.write(json.dumps(astro_thes))
 
 # #seperate file for each top concept
 # for x in astro_thes["children"]:

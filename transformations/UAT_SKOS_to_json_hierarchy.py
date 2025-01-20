@@ -12,7 +12,7 @@ flat_j = {}
 
 for t in allconcepts:
 
-    if getdepstatus(t) == None: # if concept is NOT deprecated
+    if getdepstatus(t) is None: # if concept is NOT deprecated
         litt = (lit(t))
         
         p = getbroaderterms(t)
@@ -22,14 +22,14 @@ for t in allconcepts:
         pl = []
         rcl = []
         
-        if p == None:
+        if p is None:
             pl = ["astro_thes"]
         else:
             for x in p:
                 y = (lit(x))
                 pl.append(y)
 
-        if c == None:
+        if c is None:
             pass
         else:
             for x in c:
@@ -38,11 +38,9 @@ for t in allconcepts:
 
         rts = getrelatedterms(t)
         rtlist = []
-        if rts != None:
+        if rts is not None:
             for rt in rts:
-                urt = {}
-                urt["name"] = lit(rt)
-                urt["uri"] = rt
+                urt = {"name": lit(rt), "uri": rt}
                 rtlist.append(urt)
             #onecon["related"] = rtlist
         else: 
@@ -120,15 +118,11 @@ alldep = []
 
 for t in alldepconcepts:
 
-    onecon = {}
-    onecon["uri"] = t
-    onecon["name"] = getlabel(t)
-    onecon["status"] = "deprecated"
-    
+    onecon = {"uri": t, "name": getlabel(t), "status": "deprecated"}
 
     chnote = getchangenotes(t)
     uselist = []
-    if chnote != None:
+    if chnote is not None:
         for x in chnote:
             if str(x["title"]) == 'Use instead':
                 uselist.append(x["comment"])
@@ -144,11 +138,8 @@ astro_thes["deprecated"] = alldep
 #print (astro_thes)
 
 #all uat in one file
-js_file = open("uat_"+timestamp+".json", "w")
-js_file.write(json.dumps(astro_thes))
-
-js_file.close()
-
+with open("uat_"+timestamp+".json", "w") as js_file:
+    js_file.write(json.dumps(astro_thes))
 
 # #seperate file for each top concept
 # for x in astro_thes["children"]:

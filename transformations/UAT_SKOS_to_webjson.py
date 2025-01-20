@@ -9,27 +9,19 @@ for t in allconcepts:
     #urlterm = unicode(lit(t)).replace(" ", "+").replace("/", "_")
     #get all the info for each term
 
-    if getdepstatus(t) == None: # if concept is NOT deprecated
-        onecon = {}
-        onecon["id"] = int(t[30:])
-        onecon["concept"] = lit(t)
-        
+    if getdepstatus(t) is None: # if concept is NOT deprecated
+        onecon = {"id": int(t[30:]), "concept": lit(t), "ednotes": getednotes(t), "chnotes": getchangenotes(t),
+                  "scnotes": getscopenotes(t), "examples": getexample(t), "defnote": getdefinition(t)}
+
         #vocstats = getvocstatus(t)
-        onecon["ednotes"] = getednotes(t)
-        onecon["chnotes"] = getchangenotes(t)
-        onecon["scnotes"] = getscopenotes(t)
-        onecon["examples"] = getexample(t)
-        onecon["defnote"] = getdefinition(t)
 
         #print(getdefinition(t))
 
         nts = getnarrowerterms(t)
         ntlist = []
-        if nts != None:
+        if nts is not None:
             for nt in nts:
-                unt = {}
-                unt["concept"] = lit(nt)
-                unt["id"] = int(nt[30:])
+                unt = {"concept": lit(nt), "id": int(nt[30:])}
                 ntlist.append(unt)
             onecon["narrower"] = ntlist
         else: 
@@ -37,11 +29,9 @@ for t in allconcepts:
         
         bts = getbroaderterms(t)
         btlist = []
-        if bts != None:
+        if bts is not None:
             for bt in bts:
-                ubt = {}
-                ubt["concept"] = lit(bt)
-                ubt["id"] = int(bt[30:])
+                ubt = {"concept": lit(bt), "id": int(bt[30:])}
                 btlist.append(ubt)
             onecon["broader"] = btlist
         else: 
@@ -52,11 +42,9 @@ for t in allconcepts:
 
         rts = getrelatedterms(t)
         rtlist = []
-        if rts != None:
+        if rts is not None:
             for rt in rts:
-                urt = {}
-                urt["concept"] = lit(rt)
-                urt["id"] = int(rt[30:])
+                urt = {"concept": lit(rt), "id": int(rt[30:])}
                 rtlist.append(urt)
             onecon["related"] = rtlist
         else: 
@@ -66,9 +54,7 @@ for t in allconcepts:
 
 
 #all uat in one file
-js_file = open("uat_list_webjson"+timestamp+".json", "w")
-js_file.write(json.dumps(alluat))
-
-js_file.close()
+with open("uat_list_webjson"+timestamp+".json", "w") as js_file:
+    js_file.write(json.dumps(alluat))
 
 print ("Finished.")

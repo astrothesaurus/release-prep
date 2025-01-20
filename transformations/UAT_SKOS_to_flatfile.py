@@ -3,7 +3,7 @@
 #a function to travel all the way down each path in the thesarus and return this information into a list.
 def descend(term, parents, out_list):
     lvln = getnarrowerterms(term)
-    if lvln != None: #if there are narrower terms...
+    if lvln is not None: #if there are narrower terms...
         for a in lvln:
             children = parents[:]
             children.append(lit(term))
