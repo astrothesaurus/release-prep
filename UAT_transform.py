@@ -245,7 +245,7 @@ def getallchilds(term, childlist):
 
 print ("\nCreating CSV hierarchy flatfile...")
 # csv version of the UAT
-#exec(open("transformations/UAT_SKOS_to_flatfile.py").read())
+exec(open("transformations/UAT_SKOS_to_flatfile.py").read())
 # working 1/5/2022
 
 
@@ -256,28 +256,28 @@ print ("\nCreating json files for sorting tool and other...")
 # split this file using split_uat_on_top_level_terms.py
 # for the dendrogram on the UAT website
 # working 1/5/2022
-#exec(open("transformations/UAT_SKOS_to_dendrogram.py").read())
+exec(open("transformations/UAT_SKOS_to_dendrogram.py").read())
 
 # UAT_list.json
 # expanded concept information, organized in a list of concepts
 # no hierarchy structure, used to assist searching in UAT website
 # working 1/5/2022
-#exec(open("transformations/UAT_SKOS_to_json_list.py").read())
+exec(open("transformations/UAT_SKOS_to_json_list.py").read())
 
 # UAT.json
 # expanded UAT Hierarchy organized in a json format
 # working 1/5/2022
-#exec(open("transformations/UAT_SKOS_to_json_hierarchy.py").read())
+exec(open("transformations/UAT_SKOS_to_json_hierarchy.py").read())
 
 # nothing needs this file, I think?
 # working 1/5/2022
-#exec(open("transformations/UAT_SKOS_to_webjson.py").read())
+exec(open("transformations/UAT_SKOS_to_webjson.py").read())
 
 
 print ("\nCreating javascript for autocomplete...")
 # Alex Holachek's autocomplete widget
 # working 1/5/2022
-#exec(open("transformations/UAT_SKOS_to_autocomplete.py").read())
+exec(open("transformations/UAT_SKOS_to_autocomplete.py").read())
 
 
 print ("\nCreating flat list csv file...")
