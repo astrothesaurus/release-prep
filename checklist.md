@@ -10,7 +10,7 @@
 * Export UAT RDF from management tool
   * Project > Export > RDF Project Export
   * Format: RDF/XML
-  * Thesaurus Data: Concepts, Deprecated Concepots, SKOS Notes 
+  * Thesaurus Data: Concepts, Deprecated Concepts, SKOS Notes 
 * Generate updated UAT files (see UAT_transform.py)
   * check that uat-chooser works
   * json for UAT Apps
